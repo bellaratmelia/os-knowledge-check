@@ -1,0 +1,39 @@
+# Quarto project configuration for the self-assessment quiz website.
+# The site is a static Quarto "website" project, which renders to plain
+# HTML/CSS/JS in the output directory and can be published as-is on GitHub Pages.
+project:
+  type: website
+  output-dir: _site
+  # Ensure the question bank CSV is copied into the published site so the quiz
+  # can fetch it at runtime. (FileAttachment also pulls it in, but listing it
+  # here as a resource is a belt-and-suspenders guarantee for GitHub Pages.)
+  resources:
+    - data/questions.csv
+
+website:
+  title: "Test your knowledge on Open Access Practices in Scholary Comm!"
+  description: "A self-assessment quiz on persistent identifiers, open access, research assessment, scholarly infrastructure, and related topics."
+  reader-mode: false
+  navbar:
+    background: primary
+    left:
+      - href: index.qmd
+        text: Quiz
+      - href: about.qmd
+        text: About
+    tools:
+      - icon: github
+        href: https://github.com/  
+
+format:
+  html:
+    theme: cosmo          # Clean, professional Bootstrap-based theme
+    css: styles.css       # Custom styles for the quiz component
+    toc: false
+    page-layout: article
+    grid:
+      body-width: 900px   # Comfortable reading width on desktop; still responsive on mobile
+    include-in-header:
+      # Improve mobile rendering (Quarto sets a viewport by default, but we make it explicit).
+      text: |
+        <meta name="viewport" content="width=device-width, initial-scale=1">

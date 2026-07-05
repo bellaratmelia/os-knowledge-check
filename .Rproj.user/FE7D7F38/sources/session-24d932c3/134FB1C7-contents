@@ -1,0 +1,206 @@
+# Open Science & Scholarly Publishing — Self-Assessment Quiz
+
+A static, self-assessment quiz on open science and scholarly publishing, built
+with [Quarto](https://quarto.org) and Observable JS (OJS) and designed to be
+published on **GitHub Pages**. The whole question bank lives in one CSV file, so
+you can add or edit questions without touching any code.
+
+- **Audience:** scholarly communications librarians (and researchers, research
+  infrastructure providers, and technologists in the same space).
+- **No backend:** no server, no database, no accounts. Everything runs in the
+  browser; a page refresh resets the session.
+
+---
+
+## Repository layout
+
+```
+.
+├── _quarto.yml            # Quarto project + website configuration
+├── index.qmd              # The quiz page (landing → questions → summary)
+├── about.qmd              # Background, levels, areas, and sourcing notes
+├── styles.css             # Styles for the quiz component
+├── data/
+│   └── questions.csv       # THE QUESTION BANK — single source of truth
+├── .github/
+│   └── workflows/
+│       └── publish.yml     # GitHub Action to build & deploy to GitHub Pages
+└── README.md
+```
+
+---
+
+## Build and preview locally
+
+1. **Install Quarto** (v1.4 or newer): <https://quarto.org/docs/get-started/>.
+   No other toolchain is required — the quiz uses only Quarto's built-in
+   Observable JS support, so there is no `npm install` step.
+
+2. **Preview with live reload** from the project root:
+
+   ```bash
+   quarto preview
+   ```
+
+   This opens the site in your browser and reloads on save. Because the quiz
+   reads the CSV at runtime, editing `data/questions.csv` and refreshing shows
+   your changes immediately.
+
+3. **Render a production build** into `_site/`:
+
+   ```bash
+   quarto render
+   ```
+
+   The `_site/` directory is a self-contained static site you can host anywhere.
+
+---
+
+## Add or edit questions
+
+Open **`data/questions.csv`** in a spreadsheet application or a text editor and
+add one row per question. Commit and push — that's the entire workflow.
+
+### Column reference
+
+| Column | Required | Description |
+|---|---|---|
+| `id` | yes | Unique question ID (e.g. `PID-012`). |
+| `level` | yes | Exactly one of: `Beginner`, `Intermediate`, `Expert`, `Master`. |
+| `area` | yes | The primary topic area. Must match one of the areas below **exactly**. |
+| `question` | yes | The question text. |
+| `option_a` … `option_e` | yes | The five answer options. Provide all five. |
+| `correct_option` | yes | The letter of the correct option: `a`, `b`, `c`, `d`, or `e`. |
+| `explanation_correct` | yes | Why the correct answer is correct (shown after answering). |
+| `explanation_incorrect` | recommended | Why common wrong answers are wrong (shown when the user is wrong). |
+| `source_url` | optional | Link to authoritative further reading. Leave blank if none. |
+| `review_note` | optional | Internal note flagging a fact to re-verify. **Never shown to users.** |
+
+### The fixed topic areas
+
+The `area` value must be one of these strings (they drive the topic checkboxes):
+
+```
+Persistent Identifiers
+Research Data Management
+Open Access
+Research Assessment & Metrics
+Research Integrity
+Reproducibility & Open Methods
+Scholarly Infrastructure & Organizations
+Preprints & Peer Review
+Open Source & Software
+Policy & Funder Mandates
+```
+
+If you add a question whose `area` is not in this list, it is **hidden** and a
+warning is logged to the browser console. To introduce a brand-new area, add it
+to the `AREA_ORDER` array near the top of the quiz cell in `index.qmd`.
+
+### CSV formatting tips
+
+- The file is UTF-8. Any field containing a comma, quote, or line break **must
+  be wrapped in double quotes**; a double quote inside a quoted field is escaped
+  by doubling it (`""`). Spreadsheet apps do this automatically on export — the
+  main pitfall is hand-editing.
+- Vary which option holds the correct answer (don't always use the same letter).
+- Aim for exactly five options per question; the UI expects five.
+
+### Optional: validate the CSV before pushing
+
+A quick check that every row is well-formed (Python 3, no dependencies):
+
+```bash
+python - <<'PY'
+import csv
+req = ["id","level","area","question","option_a","option_b","option_c",
+       "option_d","option_e","correct_option","explanation_correct"]
+levels = {"Beginner","Intermediate","Expert","Master"}
+with open("data/questions.csv", newline="", encoding="utf-8") as f:
+    rows = list(csv.DictReader(f))
+ids = set()
+for i, r in enumerate(rows, 2):  # row 2 = first data row
+    for c in req:
+        assert r.get(c, "").strip(), f"row {i}: missing {c}"
+    assert r["level"] in levels, f"row {i}: bad level {r['level']!r}"
+    assert r["correct_option"] in "abcde", f"row {i}: bad correct_option"
+    assert r["id"] not in ids, f"row {i}: duplicate id {r['id']}"
+    ids.add(r["id"])
+print(f"OK: {len(rows)} questions, all valid.")
+PY
+```
+
+---
+
+## Publish to GitHub Pages
+
+Two options:
+
+### A. Automated (recommended) — GitHub Actions
+
+This repo includes `.github/workflows/publish.yml`, which renders the site and
+deploys it on every push to `main`.
+
+1. Push the repository to GitHub.
+2. In **Settings → Pages**, set **Source** to **GitHub Actions**.
+3. Push to `main`. The action builds `_site/` and deploys it. Your site will be
+   at `https://<user>.github.io/<repo>/`.
+4. Update the `github` link in `_quarto.yml` (`website.navbar.tools`) to point
+   at your repository.
+
+### B. Manual — `quarto publish`
+
+```bash
+quarto publish gh-pages
+```
+
+This renders and pushes to a `gh-pages` branch. Then set **Settings → Pages →
+Source** to **Deploy from a branch** and choose `gh-pages`.
+
+> **Project vs. user site paths:** the quiz loads the CSV via a relative path,
+> so it works whether the site is served from a subpath
+> (`user.github.io/repo/`) or a root domain. No base-URL configuration needed.
+
+---
+
+## Design and architecture notes
+
+- **Why Quarto + OJS.** Quarto renders to a plain static site (ideal for GitHub
+  Pages) and keeps content, styling, and logic in one maintainable repo. OJS is
+  used for its strengths: loading the CSV (`FileAttachment(...).csv()`) and
+  embedding the interactive component.
+- **Why the quiz is one vanilla-JS component, not many reactive OJS cells.** A
+  quiz is inherently *stateful* — current question, running score, locked
+  answers. Observable's reactive model is built for dataflow (recompute when
+  inputs change), which is awkward for step-by-step mutable state. So the quiz
+  engine is a single self-contained DOM component (built with plain JavaScript
+  and a closure over its state) inside one OJS cell that depends only on the
+  loaded questions. This keeps the state model simple and predictable, and still
+  lives entirely within the Quarto/OJS setup. If you later wanted zero Quarto
+  dependency, this same component would port to a plain `index.html` +
+  `quiz.js` + `d3.csv` with almost no change.
+- **One question at a time.** Immediate per-question feedback is the core of a
+  self-assessment learning tool, so questions are shown singly rather than in
+  batches — the explanation lands at the teachable moment.
+- **Accessibility.** Native form controls (radios/checkboxes) and buttons for
+  keyboard navigation; visible focus rings; results conveyed by icon **and**
+  text, never colour alone; `aria-live` feedback region; contrast chosen for
+  WCAG AA; honours `prefers-reduced-motion`.
+- **Session length.** If more than 15 questions match the chosen filters, a
+  random 15 are asked (constant `MAX_QUESTIONS` in `index.qmd`); the user is
+  told how many of the pool are being used.
+
+---
+
+## Content accuracy
+
+Questions were written from the referenced organisations' own documentation and
+policy pages, and each row records a `source_url`. Rows with a `review_note`
+value flag facts worth re-verifying before wider publication (e.g. figures that
+grow over time, or terms whose definitions are contested). Corrections are
+welcome via issues or pull requests to `data/questions.csv`.
+
+## License
+
+Suggested: content (the CSV) under **CC BY 4.0** and code under **MIT**. Add
+`LICENSE` files to confirm before publishing.

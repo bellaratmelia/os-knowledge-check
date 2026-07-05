@@ -1,0 +1,19 @@
+# Quarto build output
+/_site/
+/.quarto/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+
+**/*.quarto_ipynb
+
+# Claude Code Runtime & Local Settings
+.claude/settings.local.json
+CLAUDE.local.md
+.claude/history/
+.claude/logs/
+
+# Others
+README_forUpdating.md

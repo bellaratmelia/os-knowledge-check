@@ -1,0 +1,368 @@
+/* ==========================================================================
+   Styles for the Open Science self-assessment quiz.
+   The site uses Quarto's "cosmo" Bootstrap theme; these rules style the custom
+   quiz component (everything prefixed .qa-) on top of it.
+   Design goals: clean, minimal, professional; comfortable on desktop and
+   mobile; accessible (visible focus, high contrast, never colour alone).
+   ========================================================================== */
+
+/* Colour tokens. Chosen for WCAG AA contrast against white backgrounds. */
+:root {
+  --qa-primary: #1f6feb;          /* action blue */
+  --qa-primary-dark: #1a5fd0;
+  --qa-correct-bg: #e6f4ea;       /* pale green */
+  --qa-correct-border: #1a7f37;   /* green, ~5.2:1 on white */
+  --qa-correct-text: #14532d;
+  --qa-wrong-bg: #fdecea;         /* pale red */
+  --qa-wrong-border: #b42318;     /* red, ~5.9:1 on white */
+  --qa-wrong-text: #7a1710;
+  --qa-border: #d0d7de;
+  --qa-muted: #57606a;
+  --qa-surface: #ffffff;
+  --qa-surface-alt: #f6f8fa;
+}
+
+/* ---- Layout container ---------------------------------------------------- */
+.quiz-app {
+  max-width: 780px;
+  margin: 1.5rem auto;
+}
+
+.quiz-app h2 {
+  margin-top: 0.5rem;
+}
+
+/* ---- Fieldsets (level + area selection) --------------------------------- */
+.qa-fieldset {
+  border: 1px solid var(--qa-border);
+  border-radius: 10px;
+  padding: 1rem 1.1rem 1.1rem;
+  margin: 0 0 1.25rem;
+}
+
+.qa-fieldset > legend {
+  font-weight: 600;
+  font-size: 1.05rem;
+  padding: 0 0.4rem;
+  width: auto;
+  margin-bottom: 0.25rem;
+}
+
+/* A single selectable choice (radio or checkbox row). */
+.qa-choice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.6rem 0.7rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+}
+.qa-choice:hover {
+  background-color: var(--qa-surface-alt);
+}
+.qa-choice input {
+  margin-top: 0.2rem;
+  width: 1.05rem;
+  height: 1.05rem;
+  flex: 0 0 auto;
+}
+.qa-choice-text {
+  display: flex;
+  flex-direction: column;
+}
+.qa-choice-title {
+  font-weight: 600;
+}
+.qa-choice-hint {
+  font-size: 0.85rem;
+  color: var(--qa-muted);
+}
+
+/* Select-all / clear-all links inside the area fieldset. */
+.qa-area-controls {
+  display: flex;
+  gap: 1rem;
+  margin: 0 0 0.5rem 0.2rem;
+}
+.qa-link-btn {
+  background: none;
+  border: none;
+  color: var(--qa-primary);
+  padding: 0;
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* ---- Buttons ------------------------------------------------------------ */
+.qa-btn {
+  display: inline-block;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  border: 1px solid var(--qa-border);
+  background: var(--qa-surface);
+  color: #1f2328;
+  cursor: pointer;
+  transition: background-color 0.12s ease, border-color 0.12s ease;
+}
+.qa-btn:hover:not(:disabled) {
+  background: var(--qa-surface-alt);
+}
+.qa-btn-primary {
+  background: var(--qa-primary);
+  border-color: var(--qa-primary);
+  color: #fff;
+}
+.qa-btn-primary:hover:not(:disabled) {
+  background: var(--qa-primary-dark);
+  border-color: var(--qa-primary-dark);
+}
+.qa-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.qa-start-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem;
+  margin-top: 0.5rem;
+}
+.qa-count {
+  margin: 0;
+  color: var(--qa-muted);
+  font-size: 0.95rem;
+}
+
+/* ---- Progress ----------------------------------------------------------- */
+.qa-progress {
+  margin-bottom: 0.75rem;
+}
+.qa-progress-text {
+  font-size: 0.9rem;
+  color: var(--qa-muted);
+  font-weight: 600;
+}
+.qa-progress-bar {
+  margin-top: 0.35rem;
+  height: 6px;
+  background: var(--qa-surface-alt);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.qa-progress-fill {
+  height: 100%;
+  background: var(--qa-primary);
+  transition: width 0.2s ease;
+}
+
+/* ---- Question metadata tags --------------------------------------------- */
+.qa-qmeta {
+  margin: 0 0 0.5rem;
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+.qa-tag {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--qa-muted);
+  background: var(--qa-surface-alt);
+  border: 1px solid var(--qa-border);
+  border-radius: 999px;
+  padding: 0.12rem 0.6rem;
+}
+.qa-question {
+  font-size: 1.3rem;
+  line-height: 1.4;
+  margin: 0.25rem 0 1rem;
+}
+
+/* ---- Answer options ----------------------------------------------------- */
+.qa-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-bottom: 1rem;
+}
+.qa-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  width: 100%;
+  text-align: left;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--qa-border);
+  border-radius: 9px;
+  background: var(--qa-surface);
+  font-size: 1rem;
+  line-height: 1.45;
+  cursor: pointer;
+  transition: border-color 0.12s ease, background-color 0.12s ease;
+}
+.qa-option:hover:not(:disabled) {
+  border-color: var(--qa-primary);
+  background: var(--qa-surface-alt);
+}
+.qa-option:disabled {
+  cursor: default;
+}
+.qa-option-letter {
+  flex: 0 0 auto;
+  font-weight: 700;
+  color: var(--qa-muted);
+  width: 1.4rem;
+  text-align: center;
+}
+.qa-option-body {
+  flex: 1 1 auto;
+}
+.qa-option-mark {
+  flex: 0 0 auto;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* Correct / wrong option states after answering (icon + colour + border). */
+.qa-option-correct {
+  border-color: var(--qa-correct-border);
+  background: var(--qa-correct-bg);
+  color: var(--qa-correct-text);
+}
+.qa-option-correct .qa-option-letter,
+.qa-option-correct .qa-option-mark { color: var(--qa-correct-border); }
+
+.qa-option-wrong {
+  border-color: var(--qa-wrong-border);
+  background: var(--qa-wrong-bg);
+  color: var(--qa-wrong-text);
+}
+.qa-option-wrong .qa-option-letter,
+.qa-option-wrong .qa-option-mark { color: var(--qa-wrong-border); }
+
+/* ---- Feedback block ----------------------------------------------------- */
+.qa-feedback {
+  border-radius: 9px;
+  padding: 0 0 0.25rem;
+}
+.qa-feedback:focus {
+  outline: none;  /* focus is moved here programmatically; avoid a stray ring */
+}
+.qa-feedback-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0.25rem 0 0.5rem;
+}
+.qa-feedback-correct .qa-feedback-heading { color: var(--qa-correct-border); }
+.qa-feedback-wrong .qa-feedback-heading { color: var(--qa-wrong-border); }
+.qa-feedback-icon { font-size: 1.25rem; }
+
+.qa-explanation {
+  margin: 0 0 0.6rem;
+  line-height: 1.55;
+}
+.qa-explanation-why {
+  color: var(--qa-muted);
+  font-size: 0.95rem;
+}
+.qa-source {
+  margin: 0 0 0.9rem;
+}
+.qa-source a {
+  font-weight: 600;
+  text-decoration: none;
+}
+.qa-source a:hover { text-decoration: underline; }
+
+/* ---- Summary ------------------------------------------------------------ */
+.qa-score {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin: 0.25rem 0 1rem;
+}
+.qa-score-big {
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+.qa-score-pct {
+  font-size: 1.2rem;
+  color: var(--qa-muted);
+}
+.qa-breakdown {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.5rem 0 1.25rem;
+}
+.qa-breakdown th, .qa-breakdown td {
+  text-align: left;
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid var(--qa-border);
+}
+.qa-breakdown thead th {
+  border-bottom: 2px solid var(--qa-border);
+  font-size: 0.9rem;
+}
+
+/* Collapsible per-question review. */
+.qa-review {
+  margin: 0.5rem 0 1.25rem;
+  border: 1px solid var(--qa-border);
+  border-radius: 9px;
+  padding: 0.5rem 0.9rem;
+}
+.qa-review > summary {
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0.35rem 0;
+}
+.qa-review-item {
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--qa-border);
+}
+.qa-review-q { font-weight: 600; margin: 0 0 0.35rem; }
+.qa-review-ok { color: var(--qa-correct-border); }
+.qa-review-no { color: var(--qa-wrong-border); }
+.qa-review-a { margin: 0 0 0.25rem; font-size: 0.95rem; }
+.qa-review-yours { color: var(--qa-wrong-text); }
+.qa-review-exp { margin: 0.25rem 0 0; font-size: 0.92rem; color: var(--qa-muted); }
+
+/* ---- Accessibility helpers ---------------------------------------------- */
+/* Visible focus ring for keyboard users on all interactive elements. */
+.quiz-app button:focus-visible,
+.quiz-app input:focus-visible,
+.quiz-app a:focus-visible,
+.quiz-app summary:focus-visible {
+  outline: 3px solid var(--qa-primary);
+  outline-offset: 2px;
+}
+
+/* Text available to screen readers but hidden visually. */
+.qa-visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0;
+}
+
+/* ---- Small screens ------------------------------------------------------ */
+@media (max-width: 520px) {
+  .qa-question { font-size: 1.15rem; }
+  .qa-score-big { font-size: 1.8rem; }
+  .qa-start-row { flex-direction: column; align-items: stretch; }
+  .qa-btn { width: 100%; }
+}
+
+/* ---- Respect reduced-motion preferences --------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .qa-progress-fill, .qa-option, .qa-btn, .qa-choice { transition: none; }
+  .quiz-app :where(*) { scroll-behavior: auto; }
+}
