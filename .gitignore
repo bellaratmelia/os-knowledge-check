@@ -6,10 +6,12 @@
 .DS_Store
 Thumbs.db
 *.swp
+.Rproj.user
 
 **/*.quarto_ipynb
 
 # Claude Code Runtime & Local Settings
+.claude
 .claude/settings.local.json
 CLAUDE.local.md
 .claude/history/
