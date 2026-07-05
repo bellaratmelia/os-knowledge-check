@@ -16,7 +16,7 @@ project:
 website:
   title: "Open Science Knowledge Checker"
   description: "Test your knowledge on persistent identifiers, open access, research assessment, scholarly infrastructure, and related topics."
-  page-footer: "Made with love and [Quarto](https://quarto.org/) by [Bella Ratmelia](https://bellaratmelia.github.io/) + Claude! - [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)."
+  page-footer: "Made with love and [Quarto](https://quarto.org/) by [Bella Ratmelia](https://bellaratmelia.github.io/) + Claude Fable 5 & Opus 4.8 - [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)."
   reader-mode: false
   navbar:
     background: primary

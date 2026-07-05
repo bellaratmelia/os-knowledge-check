@@ -24,3 +24,4 @@ CLAUDE.local.md
 README_forUpdating.md
 data/*
 !data/questions.csv
+.Rproj.user
