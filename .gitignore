@@ -6,7 +6,10 @@
 .DS_Store
 Thumbs.db
 *.swp
-.Rproj.user
+.Rproj.user/*
+.Rhistory
+.RData
+
 
 **/*.quarto_ipynb
 
@@ -19,3 +22,5 @@ CLAUDE.local.md
 
 # Others
 README_forUpdating.md
+data/*
+!data/questions.csv

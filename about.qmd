@@ -50,13 +50,14 @@ site is fully static — there is no server, database, or account.
 Questions were written using the referenced organisations' own documentation,
 FAQs, and policy pages rather than from memory, because terminology, governance,
 and scope in this area change over time. Each question carries a `source_url`
-pointing to the documentation consulted. A small number of questions are flagged
-internally (in the CSV's `review_note` column) where a fact should be
-re-verified before wider publication — for example, figures that grow over time
-or terms with contested definitions. **If you spot an error, please open an
+pointing to the documentation consulted. **If you spot an error, please open an
 issue or edit `data/questions.csv` and submit a pull request.**
 
 ## Privacy
 
 There is no analytics, no login, and no storage of your answers. Refreshing the
 page resets everything.
+
+## Feedback
+
+If you spot any inaccuracies or have any feedback, comments, or suggestions, please feel free to [send them through Issues tab on the GitHub repo](https://github.com/bellaratmelia/os-knowledge-check/issues).

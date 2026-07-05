@@ -9,13 +9,18 @@ project:
   # here as a resource is a belt-and-suspenders guarantee for GitHub Pages.)
   resources:
     - data/questions.csv
+  render:
+    - "*.qmd"
+    - "!README_forUpdating.qmd"
 
 website:
-  title: "Test your knowledge on Open Access Practices in Scholary Comm!"
-  description: "A self-assessment quiz on persistent identifiers, open access, research assessment, scholarly infrastructure, and related topics."
+  title: "Open Science Knowledge Checker"
+  description: "Test your knowledge on persistent identifiers, open access, research assessment, scholarly infrastructure, and related topics."
+  page-footer: "Made with love and [Quarto](https://quarto.org/) by [Bella Ratmelia](https://bellaratmelia.github.io/) + Claude! - [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)."
   reader-mode: false
   navbar:
     background: primary
+    pinned: true
     left:
       - href: index.qmd
         text: Quiz
@@ -23,17 +28,30 @@ website:
         text: About
     tools:
       - icon: github
-        href: https://github.com/  
+        href: https://github.com/bellaratmelia/os-knowledge-check/  
 
 format:
   html:
-    theme: cosmo          # Clean, professional Bootstrap-based theme
+    theme: zephyr          # Clean, professional Bootstrap-based theme
     css: styles.css       # Custom styles for the quiz component
     toc: false
     page-layout: article
     grid:
-      body-width: 900px   # Comfortable reading width on desktop; still responsive on mobile
+      body-width: 900px 
     include-in-header:
       # Improve mobile rendering (Quarto sets a viewport by default, but we make it explicit).
+      # Also loads Noto Sans (chosen for legibility/accessibility) via <link> rather than
+      # a CSS @import, since preconnect + link lets the browser start fetching the font
+      # immediately instead of waiting for styles.css to load first.
       text: |
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    include-before-body:
+      # "Skip to main content" link for keyboard and screen-reader users, so they can
+      # bypass the repeated navbar on every page. Visually hidden until it receives
+      # keyboard focus (see .qa-skip-link in styles.css). Targets #quarto-document-content,
+      # the wrapper Quarto renders around each page's actual content.
+      text: |
+        <a class="qa-skip-link" href="#quarto-document-content">Skip to main content</a>

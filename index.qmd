@@ -1,19 +1,22 @@
 ---
-title: "Open Science & Scholarly Publishing Self-Assessment"
-pagetitle: "Open Science Self-Assessment Quiz"
+title: "Welcome to Open Science Knowledge Checker!"
+pagetitle: "Home"
 ---
 
-Test and extend your knowledge of open science and scholarly publishing.
+Test your knowledge on persistent identifiers, open access, research assessment, scholarly infrastructure, and related topics!
+
 Pick a **difficulty level** and one or more **topic areas**, then work through
 the questions one at a time. After each answer you'll see whether you were
 right and a short explanation, with a link to further reading where available.
 
-::: {.callout-note collapse="true"}
+::: {.callout-note collapse="false"}
 ## How this works (and what it does not do)
 
-Questions are drawn from a plain CSV file (`data/questions.csv`) in this
+* Questions are drawn from a plain CSV file (`data/questions.csv`) in this
 repository, so the content can be updated by editing that file — no code
-changes needed. Nothing you do here is saved: there are no accounts, no
+changes needed. 
+
+* Nothing you do here is saved: there are no accounts, no
 tracking, and refreshing the page starts a fresh session.
 :::
 
