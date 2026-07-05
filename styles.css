@@ -6,6 +6,20 @@
    mobile; accessible (visible focus, high contrast, never colour alone).
    ========================================================================== */
 
+/* ---- Typography ----------------------------------------------------------
+   Override Bootstrap's font variables (rather than just setting body{}) so the
+   change reaches every component that references them - headings, navbar,
+   buttons, form controls - not just plain text. Noto Sans is a variable font
+   covering weights 100-900, so existing font-weight:600/700 rules elsewhere in
+   this file render correctly without extra utility classes. The fallback stack
+   is Bootstrap's own, so text stays legible even if the web font fails to load.
+   Code/pre/kbd are untouched - they use --bs-font-monospace, a separate variable.
+   ========================================================================== */
+:root {
+  --bs-font-sans-serif: "Noto Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --bs-body-font-family: var(--bs-font-sans-serif);
+}
+
 /* Colour tokens. Chosen for WCAG AA contrast against white backgrounds. */
 :root {
   --qa-primary: #1f6feb;          /* action blue */
@@ -277,9 +291,8 @@
 }
 .qa-source a {
   font-weight: 600;
-  text-decoration: none;
+  text-decoration: underline;  /* keep an always-on cue, not colour+bold alone */
 }
-.qa-source a:hover { text-decoration: underline; }
 
 /* ---- Summary ------------------------------------------------------------ */
 .qa-score {
@@ -335,13 +348,35 @@
 .qa-review-exp { margin: 0.25rem 0 0; font-size: 0.92rem; color: var(--qa-muted); }
 
 /* ---- Accessibility helpers ---------------------------------------------- */
-/* Visible focus ring for keyboard users on all interactive elements. */
-.quiz-app button:focus-visible,
-.quiz-app input:focus-visible,
-.quiz-app a:focus-visible,
-.quiz-app summary:focus-visible {
+/* Visible focus ring for keyboard users on every interactive element site-wide
+   (navbar, footer, TOC, prose links) - not just inside the quiz widget. */
+button:focus-visible,
+input:focus-visible,
+a:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
   outline: 3px solid var(--qa-primary);
   outline-offset: 2px;
+}
+
+/* "Skip to main content" link: off-screen until it receives keyboard focus,
+   then appears at the top-left so keyboard/screen-reader users can bypass the
+   navbar. Paired with the <a class="qa-skip-link"> injected in _quarto.yml. */
+.qa-skip-link {
+  position: absolute;
+  top: -3rem;
+  left: 0.5rem;
+  z-index: 2000;
+  padding: 0.6rem 1rem;
+  background: var(--qa-primary);
+  color: #fff;
+  border-radius: 0 0 8px 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: top 0.12s ease;
+}
+.qa-skip-link:focus {
+  top: 0;
 }
 
 /* Text available to screen readers but hidden visually. */
@@ -351,6 +386,43 @@
   padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0 0 0 0);
   white-space: nowrap; border: 0;
+}
+
+/* ---- View All (plain reference listing of the question bank) ------------ */
+.view-all { max-width: 780px; margin: 0 auto; }
+.va-count { color: var(--qa-muted); margin: 0 0 1rem; }
+.va-area-heading {
+  margin-top: 2rem;
+  padding-top: 0.75rem;
+  border-top: 2px solid var(--qa-border);
+}
+.va-level-heading {
+  margin-top: 1.25rem;
+  font-size: 1.05rem;
+  color: var(--qa-muted);
+}
+.va-item {
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--qa-border);
+}
+.va-meta {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--qa-muted);
+  margin: 0 0 0.3rem;
+}
+.va-question { font-weight: 600; margin: 0 0 0.5rem; }
+.va-options { margin: 0 0 0.4rem 1.2rem; padding: 0; }
+.va-options li { margin-bottom: 0.2rem; }
+.va-source { margin: 0.2rem 0 0; font-size: 0.85rem; }
+.va-note {
+  display: inline-block;
+  margin: 0.2rem 0 0;
+  padding: 0.25rem 0.55rem;
+  font-size: 0.85rem;
+  color: var(--qa-wrong-text);
+  background: var(--qa-wrong-bg);
+  border-radius: 6px;
 }
 
 /* ---- Small screens ------------------------------------------------------ */
@@ -364,5 +436,12 @@
 /* ---- Respect reduced-motion preferences --------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   .qa-progress-fill, .qa-option, .qa-btn, .qa-choice { transition: none; }
-  .quiz-app :where(*) { scroll-behavior: auto; }
+  /* Site-wide safety net: near-instant transitions/animations and no smooth
+     scrolling anywhere on the page, not just inside the quiz widget. */
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
