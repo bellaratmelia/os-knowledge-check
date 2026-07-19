@@ -399,7 +399,7 @@ summary:focus-visible,
 .va-level-heading {
   margin-top: 1.25rem;
   font-size: 1.05rem;
-  color: var(--qa-muted);
+  color: var(--qa-primary-dark);
 }
 .va-item {
   padding: 0.9rem 0;
