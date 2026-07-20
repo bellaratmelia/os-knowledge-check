@@ -1,24 +1,31 @@
 ---
-title: "Welcome to Open Science Knowledge Checker!"
+title: "Open Science Knowledge Checker"
+subtitle: "Test your knowledge on persistent identifiers, open access, research assessment, scholarly infrastructure, and related topics."
 pagetitle: "Home"
+title-block-banner: true
+title-block-banner-color: "white"
 ---
 
-Test your knowledge on persistent identifiers, open access, research assessment, scholarly infrastructure, and related topics!
+## What this is
 
-Pick a **difficulty level** and one or more **topic areas**, then work through
-the questions one at a time. After each answer you'll see whether you were
-right and a short explanation, with a link to further reading where available.
+This is a **self-assessment quiz** on open science and scholarly publishing,
+aimed primarily at scholarly communications librarians, but useful to
+researchers, research infrastructure providers, and technologists who work in
+this space. It is a learning tool, not a test with stakes: **nothing is recorded,
+and you can retake it as often as you like.**
 
-::: {.callout-note collapse="false"}
-## How this works (and what it does not do)
+## How it works
 
-* Questions are drawn from a plain CSV file (`data/questions.csv`) in this
-repository, so the content can be updated by editing that file — no code
-changes needed. 
+1. Choose an **answering mode**, one **difficulty level**, and one or more
+   **topic areas**.
+2. Answer the matching questions one at a time. 
+    * In **multiple choice** mode you pick from five options and are scored automatically. 
+    * In **short answer** mode you write your answer from memory, then compare it against the model answer and mark yourself — harder, because it tests recall rather than recognition.
+3. After each answer you see the correct answer, an explanation, and (where available) a link to authoritative further reading.
+4. At the end you get a score and, if you picked more than one area, a breakdown by area. 
+    * **Nothing you do here is saved** - there are no accounts, no tracking, and refreshing the page starts a fresh session.
 
-* Nothing you do here is saved: there are no accounts, no
-tracking, and refreshing the page starts a fresh session.
-:::
+## Start a Quiz!
 
 ```{ojs}
 //| echo: false
@@ -55,14 +62,13 @@ questions = FileAttachment("data/questions.csv").csv({ typed: false })
 quizApp = {
   // -- Fixed taxonomies -----------------------------------------------------
   // The four difficulty levels, in the order they should appear.
-  const LEVELS = ["Beginner", "Intermediate", "Expert", "Master"];
+  const LEVELS = ["Beginner", "Intermediate", "Expert"];
 
   // A one-line description of each level, shown to help users choose.
   const LEVEL_HINTS = {
     "Beginner": "Foundational definitions — “what is X”.",
     "Intermediate": "How things work and how pieces connect.",
-    "Expert": "Nuanced distinctions, standards, comparing similar tools.",
-    "Master": "Edge cases, governance, interoperability, and debates."
+    "Expert": "Nuanced distinctions, standards, comparing similar tools."
   };
 
   // The topic areas, in display order. These MUST match the `area` values in the
@@ -89,6 +95,26 @@ quizApp = {
   // The five option columns, in order.
   const OPTION_LETTERS = ["a", "b", "c", "d", "e"];
 
+  // The two answering modes, in display order.
+  const MODES = [
+    {
+      id: "mcq",
+      title: "Multiple choice",
+      hint: "Pick the best answer from five options. Scored automatically."
+    },
+    {
+      id: "short",
+      title: "Short answer (self-graded)",
+      hint: "Write your answer from memory, then compare it with the model answer and mark yourself. Harder — it tests recall, not recognition."
+    }
+  ];
+
+  // A few questions only make sense alongside their options (e.g. "which of
+  // these is a correctly formed DOI?"), so they are excluded from short-answer
+  // mode via the `mcq_only` column in the CSV. Mark a question by putting "yes"
+  // in that column — no code change needed.
+  const isMcqOnly = q => String(q.mcq_only || "").trim().toLowerCase() === "yes";
+
   // -- Sanity check: warn if the CSV contains an area we don't know about -----
   const knownAreas = new Set(AREA_ORDER);
   const unknownAreas = [...new Set(questions.map(q => q.area))].filter(a => !knownAreas.has(a));
@@ -101,11 +127,14 @@ quizApp = {
   // -- Application state ------------------------------------------------------
   const state = {
     screen: "landing",   // "landing" | "quiz" | "summary"
+    mode: "mcq",         // "mcq" (pick an option) | "short" (write, then self-grade)
     level: null,         // chosen difficulty (string)
     areas: new Set(),    // chosen topic areas
     deck: [],            // the questions for this session, in order
     idx: 0,              // index of the current question in the deck
-    responses: []        // one entry per answered question: {question, chosen, isCorrect}
+    // One entry per answered question. MCQ entries carry {chosen}; short-answer
+    // entries carry {typed} instead, and their isCorrect is self-reported.
+    responses: []
   };
 
   // The root element we return to OJS. Everything is re-rendered inside it.
@@ -124,10 +153,18 @@ quizApp = {
     return a;
   }
 
-  // How many questions match the current level + area selection?
+  // Is this question usable in the currently selected mode? Every question works
+  // as multiple choice; short-answer mode drops the option-dependent ones.
+  function usableInMode(q) {
+    return state.mode === "short" ? !isMcqOnly(q) : true;
+  }
+
+  // How many questions match the current mode + level + area selection?
   function matchingQuestions() {
     if (!state.level || state.areas.size === 0) return [];
-    return questions.filter(q => q.level === state.level && state.areas.has(q.area));
+    return questions.filter(q =>
+      q.level === state.level && state.areas.has(q.area) && usableInMode(q)
+    );
   }
 
   // Create an element with optional class, text, and attributes. Keeps the
@@ -145,11 +182,49 @@ quizApp = {
   function renderLanding() {
     root.innerHTML = "";
 
-    root.append(el("h2", { text: "Start a quiz" }));
+    // A short stats strip. Counts are derived from the CSV rather than written
+    // out, so they cannot go stale as questions are added.
+    const stats = el("p", { className: "qa-stats" });
+    for (const bit of [
+      `${questions.length} questions`,
+      `${areasPresent.length} topic areas`,
+      `${LEVELS.length} difficulty levels`,
+      "nothing is saved"
+    ]) {
+      stats.append(el("span", { className: "qa-stat", text: bit }));
+    }
+    root.append(stats);
+
+    // --- Answering mode (single-select via radio buttons) ---
+    const modeField = el("fieldset", { className: "qa-fieldset" });
+    modeField.append(el("legend", { text: "1. Choose how you want to answer" }));
+    for (const mode of MODES) {
+      const id = "mode-" + mode.id;
+      const wrap = el("label", { className: "qa-choice", attrs: { for: id } });
+
+      const input = el("input", {
+        attrs: { type: "radio", name: "mode", id, value: mode.id }
+      });
+      if (state.mode === mode.id) input.checked = true;
+      input.addEventListener("change", () => {
+        state.mode = mode.id;
+        // Re-render: the per-area counts and the matching count both depend on
+        // the mode, because short-answer mode uses a slightly smaller pool.
+        renderLanding();
+      });
+
+      const textWrap = el("span", { className: "qa-choice-text" });
+      textWrap.append(el("span", { className: "qa-choice-title", text: mode.title }));
+      textWrap.append(el("span", { className: "qa-choice-hint", text: mode.hint }));
+
+      wrap.append(input, textWrap);
+      modeField.append(wrap);
+    }
+    root.append(modeField);
 
     // --- Difficulty level (single-select via radio buttons) ---
     const levelField = el("fieldset", { className: "qa-fieldset" });
-    levelField.append(el("legend", { text: "1. Choose a difficulty level" }));
+    levelField.append(el("legend", { text: "2. Choose a difficulty level" }));
     for (const level of LEVELS) {
       const id = "level-" + level;
       const wrap = el("label", { className: "qa-choice", attrs: { for: id } });
@@ -176,7 +251,7 @@ quizApp = {
 
     // --- Topic areas (multi-select via checkboxes) ---
     const areaField = el("fieldset", { className: "qa-fieldset" });
-    areaField.append(el("legend", { text: "2. Choose one or more topic areas" }));
+    areaField.append(el("legend", { text: "3. Choose one or more topic areas" }));
 
     // Convenience: select-all / clear-all controls.
     const areaControls = el("div", { className: "qa-area-controls" });
@@ -205,8 +280,8 @@ quizApp = {
       textWrap.append(el("span", { className: "qa-choice-title", text: area }));
       // Show how many questions exist for this area at the chosen level (if any).
       const count = state.level
-        ? questions.filter(q => q.area === area && q.level === state.level).length
-        : questions.filter(q => q.area === area).length;
+        ? questions.filter(q => q.area === area && q.level === state.level && usableInMode(q)).length
+        : questions.filter(q => q.area === area && usableInMode(q)).length;
       textWrap.append(el("span", {
         className: "qa-choice-hint",
         text: state.level ? `${count} ${state.level} question${count === 1 ? "" : "s"}` : `${count} questions total`
@@ -287,6 +362,16 @@ quizApp = {
     // The question text.
     root.append(el("h2", { className: "qa-question", text: q.question }));
 
+    // A live region where feedback appears after the user answers. Both modes
+    // write into it, so it is created before the mode-specific body.
+    const feedback = el("div", { className: "qa-feedback", attrs: { role: "status", "aria-live": "polite" } });
+    root._feedback = feedback;
+
+    if (state.mode === "short") {
+      renderShortAnswerBody(q, feedback);
+      return;
+    }
+
     // The five options, as buttons in a group for keyboard accessibility.
     const optionsGroup = el("div", { className: "qa-options", attrs: { role: "group", "aria-label": "Answer options" } });
     const optionButtons = [];
@@ -301,14 +386,146 @@ quizApp = {
       optionsGroup.append(btn);
     }
     root.append(optionsGroup);
-
-    // A live region where feedback appears after the user answers.
-    const feedback = el("div", { className: "qa-feedback", attrs: { role: "status", "aria-live": "polite" } });
     root.append(feedback);
-
-    // Store references for the answer handler.
-    root._feedback = feedback;
     root._optionsGroup = optionsGroup;
+  }
+
+  // -- Screen 2b: Short-answer body -------------------------------------------
+  // The user writes an answer from memory, reveals the model answer, then grades
+  // themselves. There is no backend and no language model here, so honest
+  // self-assessment is the only grading available — and it is a good fit for a
+  // no-stakes tool whose point is to surface what you do not yet know.
+  function renderShortAnswerBody(q, feedback) {
+    const form = el("div", { className: "qa-short" });
+
+    const label = el("label", {
+      className: "qa-short-label",
+      text: "Your answer (from memory — a sentence or two is plenty)",
+      attrs: { for: "qa-short-input" }
+    });
+    const box = el("textarea", {
+      className: "qa-short-input",
+      attrs: { id: "qa-short-input", rows: "4", placeholder: "Type what you know…" }
+    });
+    form.append(label, box);
+
+    const revealBtn = el("button", {
+      className: "qa-btn qa-btn-primary",
+      text: "Reveal model answer",
+      attrs: { type: "button" }
+    });
+    const skipBtn = el("button", {
+      className: "qa-btn",
+      text: "I don't know",
+      attrs: { type: "button" }
+    });
+    const btnRow = el("div", { className: "qa-start-row" });
+    btnRow.append(revealBtn, skipBtn);
+    form.append(btnRow);
+
+    root.append(form);
+    root.append(feedback);
+    box.focus();
+
+    // Ctrl/Cmd+Enter reveals, so a keyboard user never has to leave the textarea.
+    box.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        reveal(false);
+      }
+    });
+    revealBtn.addEventListener("click", () => reveal(false));
+    skipBtn.addEventListener("click", () => reveal(true));
+
+    // Show the model answer and ask the user to grade themselves. `gaveUp` skips
+    // straight to recording an incorrect response.
+    function reveal(gaveUp) {
+      box.disabled = true;
+      revealBtn.disabled = true;
+      skipBtn.disabled = true;
+
+      feedback.innerHTML = "";
+      feedback.className = "qa-feedback qa-feedback-reveal";
+
+      feedback.append(el("p", { className: "qa-feedback-heading", text: "Model answer" }));
+      feedback.append(el("p", {
+        className: "qa-model-answer",
+        text: q["option_" + q.correct_option]
+      }));
+      feedback.append(el("p", { className: "qa-explanation", text: q.explanation_correct }));
+
+      if (q.source_url && q.source_url.trim()) {
+        const src = el("p", { className: "qa-source" });
+        src.append(el("a", {
+          text: "Further reading ↗",
+          attrs: { href: q.source_url.trim(), target: "_blank", rel: "noopener" }
+        }));
+        feedback.append(src);
+      }
+
+      if (gaveUp) {
+        recordShortAnswer(q, box.value, false);
+        return;
+      }
+
+      // Self-grading controls. Deliberately two plain buttons rather than a
+      // slider or partial credit: the finer the scale, the more the user has to
+      // adjudicate their own answer instead of reading the model one.
+      feedback.append(el("p", {
+        className: "qa-selfgrade-prompt",
+        text: "Compared with the model answer, did you have the substance of it?"
+      }));
+      const gradeRow = el("div", { className: "qa-start-row" });
+      const gotIt = el("button", { className: "qa-btn qa-btn-correct", text: "✓ I had it", attrs: { type: "button" } });
+      const missed = el("button", { className: "qa-btn qa-btn-wrong", text: "✗ I missed it", attrs: { type: "button" } });
+      gotIt.addEventListener("click", () => recordShortAnswer(q, box.value, true));
+      missed.addEventListener("click", () => recordShortAnswer(q, box.value, false));
+      gradeRow.append(gotIt, missed);
+      feedback.append(gradeRow);
+
+      feedback.setAttribute("tabindex", "-1");
+      feedback.focus();
+    }
+  }
+
+  // Record a self-graded response and offer the advance control.
+  function recordShortAnswer(q, typed, isCorrect) {
+    state.responses.push({ question: q, typed: typed.trim(), isCorrect });
+
+    const feedback = root._feedback;
+    // Drop the self-grading controls, keep the model answer visible.
+    for (const node of [...feedback.querySelectorAll(".qa-start-row, .qa-selfgrade-prompt")]) {
+      node.remove();
+    }
+    feedback.classList.add(isCorrect ? "qa-feedback-correct" : "qa-feedback-wrong");
+
+    const verdict = el("p", { className: "qa-selfgrade-verdict" });
+    verdict.append(el("span", { className: "qa-feedback-icon", attrs: { "aria-hidden": "true" }, text: isCorrect ? "✓" : "✗" }));
+    verdict.append(el("span", { text: isCorrect ? "Marked as known" : "Marked as not known" }));
+    feedback.append(verdict);
+
+    feedback.append(makeAdvanceButton());
+    feedback.setAttribute("tabindex", "-1");
+    feedback.focus();
+  }
+
+  // The "Next question" / "See results" control, shared by both modes.
+  function makeAdvanceButton() {
+    const isLast = state.idx === state.deck.length - 1;
+    const nextBtn = el("button", {
+      className: "qa-btn qa-btn-primary",
+      text: isLast ? "See results" : "Next question",
+      attrs: { type: "button" }
+    });
+    nextBtn.addEventListener("click", () => {
+      if (isLast) {
+        state.screen = "summary";
+      } else {
+        state.idx += 1;
+      }
+      render();
+    });
+    return nextBtn;
   }
 
   // Handle the user selecting an answer for the current question.
@@ -359,22 +576,7 @@ quizApp = {
     }
 
     // Next / Finish button.
-    const isLast = state.idx === state.deck.length - 1;
-    const nextBtn = el("button", {
-      className: "qa-btn qa-btn-primary",
-      text: isLast ? "See results" : "Next question",
-      attrs: { type: "button" }
-    });
-    nextBtn.addEventListener("click", () => {
-      if (isLast) {
-        state.screen = "summary";
-        render();
-      } else {
-        state.idx += 1;
-        render();
-      }
-    });
-    feedback.append(nextBtn);
+    feedback.append(makeAdvanceButton());
 
     // Move keyboard focus to the feedback so screen-reader users hear the result
     // and can Tab straight to the Next button.
@@ -391,10 +593,31 @@ quizApp = {
 
     root.append(el("h2", { text: "Your results" }));
 
-    const score = el("p", { className: "qa-score" });
-    score.append(el("span", { className: "qa-score-big", text: `${correct} / ${total}` }));
-    score.append(el("span", { className: "qa-score-pct", text: `(${pct}%)` }));
-    root.append(score);
+    // Score ring. The SVG is decorative (aria-hidden) because the same numbers
+    // are in the adjacent text, which is what a screen reader should read.
+    // stroke-dasharray draws `pct` percent of the circumference; the -90deg
+    // rotation in CSS moves the start point from 3 o'clock to 12 o'clock.
+    const R = 52;
+    const CIRC = 2 * Math.PI * R;
+    const ring = el("div", { className: "qa-score" });
+    ring.innerHTML = `
+      <svg class="qa-ring" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+        <circle class="qa-ring-track" cx="60" cy="60" r="${R}"></circle>
+        <circle class="qa-ring-fill" cx="60" cy="60" r="${R}"
+                stroke-dasharray="${(CIRC * pct / 100).toFixed(1)} ${CIRC.toFixed(1)}"></circle>
+      </svg>`;
+    const scoreText = el("div", { className: "qa-score-text" });
+    scoreText.append(el("span", { className: "qa-score-big", text: `${correct} / ${total}` }));
+    scoreText.append(el("span", { className: "qa-score-pct", text: `${pct}% correct` }));
+    ring.append(scoreText);
+    root.append(ring);
+
+    if (state.mode === "short") {
+      root.append(el("p", {
+        className: "qa-count",
+        text: "Short-answer scores are self-reported — this is your own judgement of your recall, not a graded result."
+      }));
+    }
 
     // Per-area breakdown, shown when more than one area was in play.
     const areasInDeck = [...new Set(state.responses.map(r => r.question.area))];
@@ -410,7 +633,16 @@ quizApp = {
         const c = rs.filter(r => r.isCorrect).length;
         const tr = el("tr");
         tr.append(el("th", { text: area, attrs: { scope: "row" } }));
-        tr.append(el("td", { text: `${c} / ${rs.length}` }));
+
+        // The cell keeps its plain "3 / 5" text for screen readers and adds a
+        // purely decorative bar beside it, so the table stays a real table.
+        const td = el("td");
+        const meter = el("div", { className: "qa-bar", attrs: { "aria-hidden": "true" } });
+        const meterFill = el("div", { className: "qa-bar-fill" });
+        meterFill.style.width = `${rs.length ? (c / rs.length) * 100 : 0}%`;
+        meter.append(meterFill);
+        td.append(meter, el("span", { className: "qa-bar-label", text: `${c} / ${rs.length}` }));
+        tr.append(td);
         tbody.append(tr);
       }
       table.append(tbody);
@@ -432,7 +664,14 @@ quizApp = {
         className: "qa-review-a",
         text: `Correct answer: ${q.correct_option.toUpperCase()}. ${q["option_" + q.correct_option]}`
       }));
-      if (!r.isCorrect) {
+      // Short-answer responses carry the text the user typed; MCQ responses
+      // carry the letter they picked. Show whichever applies.
+      if (r.typed !== undefined) {
+        item.append(el("p", {
+          className: "qa-review-a qa-review-yours",
+          text: r.typed ? `You wrote: ${r.typed}` : "You left this blank."
+        }));
+      } else if (!r.isCorrect) {
         item.append(el("p", {
           className: "qa-review-a qa-review-yours",
           text: `You chose: ${r.chosen.toUpperCase()}. ${q["option_" + r.chosen]}`

@@ -20,10 +20,13 @@
   --bs-body-font-family: var(--bs-font-sans-serif);
 }
 
-/* Colour tokens. Chosen for WCAG AA contrast against white backgrounds. */
+/* Colour tokens. Chosen for WCAG AA contrast against white backgrounds.
+   Ratios below are against #ffffff; the accent is also checked against
+   --qa-surface-alt, because link-styled buttons can sit on that tint. */
 :root {
-  --qa-primary: #1f6feb;          /* action blue */
-  --qa-primary-dark: #1a5fd0;
+  --qa-primary: #155e75;          /* deep petrol, 7.27:1 on white, 6.83:1 on alt */
+  --qa-primary-dark: #0e4459;     /* hover/active */
+  --qa-primary-tint: #e8f2f6;     /* pale wash for hero + score ring track */
   --qa-correct-bg: #e6f4ea;       /* pale green */
   --qa-correct-border: #1a7f37;   /* green, ~5.2:1 on white */
   --qa-correct-text: #14532d;
@@ -34,6 +37,20 @@
   --qa-muted: #57606a;
   --qa-surface: #ffffff;
   --qa-surface-alt: #f6f8fa;
+}
+
+/* ---- Title banner -------------------------------------------------------- */
+/* index.qmd sets `title-block-banner: true`; the colour lives here rather than
+   in the front matter so the accent has exactly one source of truth. */
+.quarto-title-banner {
+  background: var(--qa-primary);
+}
+.quarto-title-banner .subtitle {
+  margin-top: 0.4rem;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  max-width: 60ch;
+  opacity: 0.92;
 }
 
 /* ---- Layout container ---------------------------------------------------- */
@@ -297,17 +314,88 @@
 /* ---- Summary ------------------------------------------------------------ */
 .qa-score {
   display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  margin: 0.25rem 0 1rem;
+  align-items: center;
+  gap: 1.1rem;
+  margin: 0.25rem 0 1.25rem;
+}
+.qa-score-text {
+  display: flex;
+  flex-direction: column;
 }
 .qa-score-big {
   font-size: 2.2rem;
   font-weight: 700;
+  line-height: 1.1;
 }
 .qa-score-pct {
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: var(--qa-muted);
+}
+
+/* Score ring. Decorative — the numbers beside it carry the meaning. */
+.qa-ring {
+  width: 104px;
+  height: 104px;
+  flex: 0 0 auto;
+  transform: rotate(-90deg);   /* start the arc at 12 o'clock, not 3 o'clock */
+}
+.qa-ring-track, .qa-ring-fill {
+  fill: none;
+  stroke-width: 10;
+}
+.qa-ring-track {
+  stroke: var(--qa-primary-tint);
+}
+.qa-ring-fill {
+  stroke: var(--qa-primary);
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.4s ease;
+}
+
+/* Per-area bars. Decorative siblings of the "3 / 5" text in the same cell. */
+.qa-bar {
+  display: inline-block;
+  vertical-align: middle;
+  /* Long area names ("Scholarly Infrastructure & Organizations") otherwise
+     starve this column down to a ~70px stub; the paired rule on .qa-breakdown td
+     reserves it a fair share of the row. */
+  width: min(140px, 72%);
+  height: 8px;
+  margin-right: 0.6rem;
+  background: var(--qa-primary-tint);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.qa-bar-fill {
+  height: 100%;
+  background: var(--qa-primary);
+  border-radius: 999px;
+}
+.qa-bar-label {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Landing stats strip ------------------------------------------------- */
+.qa-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.9rem;
+  margin: 0 0 1.25rem;
+  font-size: 0.88rem;
+  color: var(--qa-muted);
+}
+/* Separator dots between stats, drawn rather than typed so they are not read
+   aloud as punctuation by screen readers. */
+.qa-stat + .qa-stat::before {
+  content: "";
+  display: inline-block;
+  width: 3px;
+  height: 3px;
+  margin-right: 0.9rem;
+  vertical-align: middle;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.55;
 }
 .qa-breakdown {
   width: 100%;
@@ -318,6 +406,10 @@
   text-align: left;
   padding: 0.5rem 0.6rem;
   border-bottom: 1px solid var(--qa-border);
+}
+.qa-breakdown td {
+  width: 40%;
+  white-space: nowrap;
 }
 .qa-breakdown thead th {
   border-bottom: 2px solid var(--qa-border);
@@ -425,17 +517,92 @@ summary:focus-visible,
   border-radius: 6px;
 }
 
+/* ---- Short-answer mode --------------------------------------------------- */
+.qa-short {
+  margin: 1rem 0;
+}
+.qa-short-label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+  color: var(--qa-muted);
+}
+.qa-short-input {
+  width: 100%;
+  padding: 0.6rem 0.7rem;
+  font: inherit;
+  line-height: 1.5;
+  color: inherit;
+  background: var(--qa-surface);
+  border: 1px solid var(--qa-border);
+  border-radius: 6px;
+  resize: vertical;
+}
+.qa-short-input:focus-visible {
+  outline: 2px solid var(--qa-primary);
+  outline-offset: 1px;
+}
+.qa-short-input:disabled {
+  background: var(--qa-surface-alt);
+  opacity: 1;            /* keep the user's own text readable after reveal */
+}
+
+/* The revealed answer block, before the user has graded themselves: neutral,
+   so the colour does not pre-empt their own verdict. */
+.qa-feedback-reveal {
+  background: var(--qa-surface-alt);
+  border-left: 4px solid var(--qa-border);
+}
+.qa-model-answer {
+  margin: 0 0 0.6rem;
+  font-weight: 600;
+}
+.qa-selfgrade-prompt {
+  margin: 0.9rem 0 0.5rem;
+  font-size: 0.95rem;
+  color: var(--qa-muted);
+}
+.qa-selfgrade-verdict {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  margin: 0.9rem 0 0.6rem;
+  font-weight: 600;
+}
+
+/* Self-grading buttons. Tinted rather than solid, so they read as a judgement
+   the user is making rather than as the app's own verdict. */
+.qa-btn-correct {
+  background: var(--qa-correct-bg);
+  border-color: var(--qa-correct-border);
+  color: var(--qa-correct-text);
+}
+.qa-btn-wrong {
+  background: var(--qa-wrong-bg);
+  border-color: var(--qa-wrong-border);
+  color: var(--qa-wrong-text);
+}
+.qa-btn-correct:hover:not(:disabled),
+.qa-btn-wrong:hover:not(:disabled) {
+  filter: brightness(0.96);
+}
+
 /* ---- Small screens ------------------------------------------------------ */
 @media (max-width: 520px) {
   .qa-question { font-size: 1.15rem; }
   .qa-score-big { font-size: 1.8rem; }
   .qa-start-row { flex-direction: column; align-items: stretch; }
   .qa-btn { width: 100%; }
+  /* The area column eats the row at this width, leaving a ~30px stub that reads
+     as noise rather than a bar. It is decorative and the "3 / 5" text stays, so
+     dropping it loses nothing. */
+  .qa-bar { display: none; }
+  .qa-ring { width: 84px; height: 84px; }
 }
 
 /* ---- Respect reduced-motion preferences --------------------------------- */
 @media (prefers-reduced-motion: reduce) {
-  .qa-progress-fill, .qa-option, .qa-btn, .qa-choice { transition: none; }
+  .qa-progress-fill, .qa-option, .qa-btn, .qa-choice, .qa-ring-fill { transition: none; }
   /* Site-wide safety net: near-instant transitions/animations and no smooth
      scrolling anywhere on the page, not just inside the quiz widget. */
   *, *::before, *::after {

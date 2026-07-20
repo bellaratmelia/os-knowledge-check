@@ -1,5 +1,8 @@
 ---
-title: "About this quiz"
+title: "About Open Science Knowledge Checker"
+pagetitle: "About"
+title-block-banner: true
+title-block-banner-color: "white"
 ---
 
 ## What this is
@@ -12,12 +15,16 @@ and you can retake it as often as you like.
 
 ## How it works
 
-1. Choose one **difficulty level** and one or more **topic areas**.
-2. Answer the matching questions one at a time.
-3. After each answer you see whether you were right, an explanation, and
+1. Choose an **answering mode**, one **difficulty level**, and one or more
+   **topic areas**.
+2. Answer the matching questions one at a time. In **multiple choice** mode you
+   pick from five options and are scored automatically. In **short answer** mode
+   you write your answer from memory, then compare it against the model answer
+   and mark yourself — harder, because it tests recall rather than recognition.
+3. After each answer you see the correct answer, an explanation, and
    (where available) a link to authoritative further reading.
 4. At the end you get a score and, if you picked more than one area, a
-   breakdown by area.
+   breakdown by area. Nothing you do here is saved: there are no accounts, no tracking, and refreshing the page starts a fresh session.
 
 Questions live in a single CSV file in the project repository
 (`data/questions.csv`) and are loaded in your browser when the page opens. The
@@ -30,7 +37,6 @@ site is fully static — there is no server, database, or account.
 | **Beginner** | Foundational definitions — "what is X" |
 | **Intermediate** | How things work and how pieces connect |
 | **Expert** | Nuanced distinctions, standards and policy detail, comparing similar tools |
-| **Master** | Edge cases, governance and history, cross-system interoperability, and debates in the field |
 
 ## Topic areas
 

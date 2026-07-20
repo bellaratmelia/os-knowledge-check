@@ -1,6 +1,8 @@
 # Quarto project configuration for the self-assessment quiz website.
 # The site is a static Quarto "website" project, which renders to plain
 # HTML/CSS/JS in the output directory and can be published as-is on GitHub Pages.
+
+brand: brand/_brand.yml
 project:
   type: website
   output-dir: _site
@@ -19,7 +21,7 @@ website:
   page-footer: "Made with love and [Quarto](https://quarto.org/) by [Bella Ratmelia](https://bellaratmelia.github.io/) + Claude Fable 5 & Opus 4.8 - [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)."
   reader-mode: false
   navbar:
-    background: primary
+    background: light
     pinned: true
     left:
       - href: index.qmd
@@ -34,7 +36,8 @@ format:
   html:
     theme: zephyr          # Clean, professional Bootstrap-based theme
     css: styles.css       # Custom styles for the quiz component
-    toc: false
+    toc: true
+    toc-location: left
     page-layout: article
     grid:
       body-width: 900px 

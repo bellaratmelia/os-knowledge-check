@@ -1,0 +1,8 @@
+color:
+  background: "#0f0"
+  
+typography:
+  headings:
+    color:
+      light: "#111144"
+      dark: "#d0d0ff"
