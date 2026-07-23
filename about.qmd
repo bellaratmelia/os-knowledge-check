@@ -13,6 +13,28 @@ researchers, research infrastructure providers, and technologists who work in
 this space. It is a learning tool, not a test with stakes: nothing is recorded,
 and you can retake it as often as you like.
 
+## Why this exists
+
+There is no shortage of good open science material to read. Primers, guides,
+LibGuides, curated link lists, training modules, community glossaries — the
+introductory layer is well covered, and much of it is excellent.
+
+What is harder to find is somewhere to check whether any of it stuck.
+
+Reading a clear explanation of the difference between green and gold open access
+feels a lot like understanding it. Being asked to produce that difference cold,
+without the options in front of you, is a different exercise — and usually a
+more honest one. That gap between recognising an answer and being able to recall
+it is the gap this site is built around, which is also why **short answer** mode
+exists alongside multiple choice.
+
+The audience shapes it too. Scholarly communications work has an unusually wide
+surface: identifiers, licensing, funder mandates, repository practice,
+metrics, integrity policy, research data. People are expected to advise
+confidently across all of it, the details shift constantly, and there are few
+low-stakes ways to find the soft spots before someone asks you a question at a
+consultation. Getting one wrong here costs nothing.
+
 ## How it works
 
 1. Choose an **answering mode**, one **difficulty level**, and one or more
@@ -58,6 +80,29 @@ FAQs, and policy pages rather than from memory, because terminology, governance,
 and scope in this area change over time. Each question carries a `source_url`
 pointing to the documentation consulted. **If you spot an error, please open an
 issue or edit `data/questions.csv` and submit a pull request.**
+
+## How this was built, and where AI comes into it
+
+This site was built with substantial help from AI. That covers the code — a
+static [Quarto](https://quarto.org) site with the quiz itself written in
+Observable JS — and the first drafts of most questions, explanations, and the
+prose on this page.
+
+Saying so plainly seems better than the alternative, particularly to an audience
+that spends its working life on provenance and attribution. It also matters
+because a language model writing confident-sounding text about DOI governance or
+Plan S compliance is exactly the failure mode this site would be worst placed to
+have. So the drafts were treated as drafts:
+
+- Questions were written against the referenced organisations' own
+  documentation, FAQs, and policy pages rather than from model memory.
+- Each question carries a `source_url` pointing to what was consulted, and those
+  links were checked rather than assumed.
+- Wording, difficulty levels, and topic assignments were revised by hand where
+  drafts were vague, subtly wrong, or confidently wrong.
+
+None of that makes the bank infallible — it makes it correctable, which is the
+more realistic goal. If something here is wrong, [please say so](https://github.com/bellaratmelia/os-knowledge-check/issues).
 
 ## Privacy
 

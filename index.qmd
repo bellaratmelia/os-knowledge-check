@@ -6,24 +6,13 @@ title-block-banner: true
 title-block-banner-color: "white"
 ---
 
-## What this is
+Pick how you want to answer, a difficulty level, and the topics you care about.
+You'll get one question at a time, with an explanation and a link to further
+reading after each one. **Nothing is recorded, and you can retake it as often as
+you like.**
 
-This is a **self-assessment quiz** on open science and scholarly publishing,
-aimed primarily at scholarly communications librarians, but useful to
-researchers, research infrastructure providers, and technologists who work in
-this space. It is a learning tool, not a test with stakes: **nothing is recorded,
-and you can retake it as often as you like.**
-
-## How it works
-
-1. Choose an **answering mode**, one **difficulty level**, and one or more
-   **topic areas**.
-2. Answer the matching questions one at a time. 
-    * In **multiple choice** mode you pick from five options and are scored automatically. 
-    * In **short answer** mode you write your answer from memory, then compare it against the model answer and mark yourself — harder, because it tests recall rather than recognition.
-3. After each answer you see the correct answer, an explanation, and (where available) a link to authoritative further reading.
-4. At the end you get a score and, if you picked more than one area, a breakdown by area. 
-    * **Nothing you do here is saved** - there are no accounts, no tracking, and refreshing the page starts a fresh session.
+For where the questions come from, why this exists, and how it was built, see
+[About](about.qmd).
 
 ## Start a Quiz!
 
