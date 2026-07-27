@@ -21,6 +21,13 @@
     "text": "What this is\nThis is a self-assessment quiz on open science and scholarly publishing, aimed primarily at scholarly communications librarians, but useful to researchers, research infrastructure providers, and technologists who work in this space. It is a learning tool, not a test with stakes: nothing is recorded, and you can retake it as often as you like."
   },
   {
+    "objectID": "about.html#why-this-exists",
+    "href": "about.html#why-this-exists",
+    "title": "About Open Science Knowledge Checker",
+    "section": "Why this exists",
+    "text": "Why this exists\nThere is no shortage of good open science material to read. Primers, guides, LibGuides, curated link lists, training modules, community glossaries — the introductory layer is well covered, and much of it is excellent.\nWhat is harder to find is somewhere to check whether any of it stuck.\nReading a clear explanation of the difference between green and gold open access feels a lot like understanding it. Being asked to produce that difference cold, without the options in front of you, is a different exercise — and usually a more honest one. That gap between recognising an answer and being able to recall it is the gap this site is built around, which is also why short answer mode exists alongside multiple choice.\nThe audience shapes it too. Scholarly communications work has an unusually wide surface: identifiers, licensing, funder mandates, repository practice, metrics, integrity policy, research data. People are expected to advise confidently across all of it, the details shift constantly, and there are few low-stakes ways to find the soft spots before someone asks you a question at a consultation. Getting one wrong here costs nothing."
+  },
+  {
     "objectID": "about.html#how-it-works",
     "href": "about.html#how-it-works",
     "title": "About Open Science Knowledge Checker",
@@ -49,6 +56,13 @@
     "text": "Accuracy and sources\nQuestions were written using the referenced organisations’ own documentation, FAQs, and policy pages rather than from memory, because terminology, governance, and scope in this area change over time. Each question carries a source_url pointing to the documentation consulted. If you spot an error, please open an issue or edit data/questions.csv and submit a pull request."
   },
   {
+    "objectID": "about.html#how-this-was-built-and-where-ai-comes-into-it",
+    "href": "about.html#how-this-was-built-and-where-ai-comes-into-it",
+    "title": "About Open Science Knowledge Checker",
+    "section": "How this was built, and where AI comes into it",
+    "text": "How this was built, and where AI comes into it\nThis site was built with substantial help from AI. That covers the code — a static Quarto site with the quiz itself written in Observable JS — and the first drafts of most questions, explanations, and the prose on this page.\nSaying so plainly seems better than the alternative, particularly to an audience that spends its working life on provenance and attribution. It also matters because a language model writing confident-sounding text about DOI governance or Plan S compliance is exactly the failure mode this site would be worst placed to have. So the drafts were treated as drafts:\n\nQuestions were written against the referenced organisations’ own documentation, FAQs, and policy pages rather than from model memory.\nEach question carries a source_url pointing to what was consulted, and those links were checked rather than assumed.\nWording, difficulty levels, and topic assignments were revised by hand where drafts were vague, subtly wrong, or confidently wrong.\n\nNone of that makes the bank infallible — it makes it correctable, which is the more realistic goal. If something here is wrong, please say so."
+  },
+  {
     "objectID": "about.html#privacy",
     "href": "about.html#privacy",
     "title": "About Open Science Knowledge Checker",
@@ -67,21 +81,7 @@
     "href": "index.html",
     "title": "Open Science Knowledge Checker",
     "section": "",
-    "text": "Skip to main content"
-  },
-  {
-    "objectID": "index.html#what-this-is",
-    "href": "index.html#what-this-is",
-    "title": "Open Science Knowledge Checker",
-    "section": "What this is",
-    "text": "What this is\nThis is a self-assessment quiz on open science and scholarly publishing, aimed primarily at scholarly communications librarians, but useful to researchers, research infrastructure providers, and technologists who work in this space. It is a learning tool, not a test with stakes: nothing is recorded, and you can retake it as often as you like."
-  },
-  {
-    "objectID": "index.html#how-it-works",
-    "href": "index.html#how-it-works",
-    "title": "Open Science Knowledge Checker",
-    "section": "How it works",
-    "text": "How it works\n\nChoose an answering mode, one difficulty level, and one or more topic areas.\nAnswer the matching questions one at a time.\n\nIn multiple choice mode you pick from five options and are scored automatically.\nIn short answer mode you write your answer from memory, then compare it against the model answer and mark yourself — harder, because it tests recall rather than recognition.\n\nAfter each answer you see the correct answer, an explanation, and (where available) a link to authoritative further reading.\nAt the end you get a score and, if you picked more than one area, a breakdown by area.\n\nNothing you do here is saved - there are no accounts, no tracking, and refreshing the page starts a fresh session."
+    "text": "Skip to main content\nPick how you want to answer, a difficulty level, and the topics you care about. You’ll get one question at a time, with an explanation and a link to further reading after each one. Nothing is recorded, and you can retake it as often as you like.\nFor where the questions come from, why this exists, and how it was built, see About."
   },
   {
     "objectID": "index.html#start-a-quiz",
