@@ -43,7 +43,6 @@ add one row per question. Commit and push — that's the entire workflow.
 | `option_a` … `option_e` | yes | The five answer options. Provide all five. |
 | `correct_option` | yes | The letter of the correct option: `a`, `b`, `c`, `d`, or `e`. |
 | `explanation_correct` | yes | Why the correct answer is correct (shown after answering). |
-| `explanation_incorrect` | recommended | Why common wrong answers are wrong (shown when the user is wrong). |
 | `source_url` | optional | Link to authoritative further reading. Leave blank if none. |
 | `review_note` | optional | Internal note flagging a fact to re-verify. **Never shown to users.** |
 

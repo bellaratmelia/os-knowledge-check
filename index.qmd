@@ -548,12 +548,12 @@ quizApp = {
     heading.append(el("span", { text: isCorrect ? "Correct" : "Incorrect" }));
     feedback.append(heading);
 
-    // Always explain why the correct answer is correct.
-    feedback.append(el("p", { className: "qa-explanation", text: q.explanation_correct }));
-
-    // If the user was wrong, add the note on why common wrong answers are wrong.
-    if (!isCorrect && q.explanation_incorrect) {
-      feedback.append(el("p", { className: "qa-explanation qa-explanation-why", text: q.explanation_incorrect }));
+    // Explain why the correct answer is correct only when the user got it right;
+    // otherwise show a short generic prompt to try again.
+    if (isCorrect) {
+      feedback.append(el("p", { className: "qa-explanation", text: q.explanation_correct }));
+    } else {
+      feedback.append(el("p", { className: "qa-explanation qa-explanation-why", text: "That's not the correct answer; try again!" }));
     }
 
     // Optional link to further reading.
