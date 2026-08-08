@@ -88,5 +88,9 @@ welcome via issues or pull requests to `data/questions.csv`.
 
 ## License
 
-Content (the CSV) under **CC BY 4.0** and code under **MIT**. Add
-`LICENSE` files to confirm before publishing.
+Code in this repository (Quarto templates, build scripts, and site 
+infrastructure) is licensed under the [MIT License](LICENSE).
+
+Quiz content (questions, answer options, and explanations) is licensed 
+under [CC BY 4.0](LICENSE-CONTENT.md). If you reuse or adapt the question 
+bank, please credit and link back to this repository.
