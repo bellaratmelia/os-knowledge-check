@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Styles for the Open Science self-assessment quiz.
+   Styles for the Open Scholarship Knowledge Check quiz.
    The site uses Quarto's "cosmo" Bootstrap theme; these rules style the custom
    quiz component (everything prefixed .qa-) on top of it.
    Design goals: clean, minimal, professional; comfortable on desktop and
@@ -108,6 +108,13 @@
 .qa-choice-hint {
   font-size: 0.85rem;
   color: var(--qa-muted);
+}
+/* Topic-area description: the readable content line, so it keeps the body text
+   colour while the count hint below it stays muted and small. */
+.qa-choice-desc {
+  font-size: 0.9rem;
+  line-height: 1.45;
+  margin: 0.1rem 0 0.2rem;
 }
 
 /* Select-all / clear-all links inside the area fieldset. */
@@ -309,6 +316,34 @@
 .qa-source a {
   font-weight: 600;
   text-decoration: underline;  /* keep an always-on cue, not colour+bold alone */
+}
+
+/* ---- Concepts tested (tags) ---------------------------------------------
+   Shown after answering, as a learning signal. Deliberately distinct from the
+   grey .qa-tag area pill: petrol-tinted chips, so "broad home" (area) and
+   "specific concepts" (tags) read as two different things at a glance. */
+.qa-concepts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 0.9rem;
+}
+.qa-concepts-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--qa-muted);
+}
+.qa-chip {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--qa-primary);
+  background: var(--qa-primary-tint);
+  border-radius: 999px;
+  padding: 0.1rem 0.55rem;
+}
+.qa-review-item .qa-concepts {
+  margin: 0.35rem 0 0;
 }
 
 /* ---- Summary ------------------------------------------------------------ */

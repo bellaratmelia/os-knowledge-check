@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>About – Open Scholarship Knowledge Check</title>
+<title>Development – Open Scholarship Knowledge Check</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -116,7 +116,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Quiz</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./about.html" aria-current="page"> 
+    <a class="nav-link" href="./about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
 </ul>
@@ -131,7 +131,7 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">About the Open Scholarship Knowledge Check</h1>
+      <h1 class="title">How this project was developed</h1>
                       </div>
   </div>
     
@@ -151,15 +151,12 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#what-this-is" id="toc-what-this-is" class="nav-link active" data-scroll-target="#what-this-is">What this is</a></li>
-  <li><a href="#why-this-exists" id="toc-why-this-exists" class="nav-link" data-scroll-target="#why-this-exists">Why this exists</a></li>
-  <li><a href="#about-the-creator" id="toc-about-the-creator" class="nav-link" data-scroll-target="#about-the-creator">About the creator</a></li>
-  <li><a href="#how-it-works" id="toc-how-it-works" class="nav-link" data-scroll-target="#how-it-works">How it works</a></li>
-  <li><a href="#difficulty-levels" id="toc-difficulty-levels" class="nav-link" data-scroll-target="#difficulty-levels">Difficulty levels</a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#technical-design" id="toc-technical-design" class="nav-link" data-scroll-target="#technical-design">Technical design</a></li>
+  <li><a href="#question-development-and-ai" id="toc-question-development-and-ai" class="nav-link" data-scroll-target="#question-development-and-ai">Question development and AI</a></li>
+  <li><a href="#review-and-quality-checks" id="toc-review-and-quality-checks" class="nav-link" data-scroll-target="#review-and-quality-checks">Review and quality checks</a></li>
   <li><a href="#topic-areas" id="toc-topic-areas" class="nav-link" data-scroll-target="#topic-areas">Topic areas</a></li>
-  <li><a href="#using-it-for-teaching" id="toc-using-it-for-teaching" class="nav-link" data-scroll-target="#using-it-for-teaching">Using it for teaching</a></li>
-  <li><a href="#privacy" id="toc-privacy" class="nav-link" data-scroll-target="#privacy">Privacy</a></li>
-  <li><a href="#feedback-and-contributions" id="toc-feedback-and-contributions" class="nav-link" data-scroll-target="#feedback-and-contributions">Feedback and contributions</a></li>
+  <li><a href="#maintenance-and-contribution" id="toc-maintenance-and-contribution" class="nav-link" data-scroll-target="#maintenance-and-contribution">Maintenance and contribution</a></li>
   </ul>
 </nav>
 </nav>
@@ -175,109 +172,38 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="what-this-is" class="level2">
-<h2 class="anchored" data-anchor-id="what-this-is">What this is</h2>
-<p>The <strong>Open Scholarship Knowledge Check</strong> is a low-stakes self-assessment for exploring your understanding of open scholarship, scholarly communication, and research infrastructure.</p>
-<p>It is designed primarily for librarians and research support professionals, but may also be useful to researchers, infrastructure providers, technologists, and others working in this area. The aim is to help you identify what you already know, uncover gaps in your understanding, and discover reliable resources for further learning.</p>
-<p>The question bank can also be used as a teaching resource. Educators, librarians, and trainers are welcome to draw on it for workshops, classroom activities, team discussions, or informal professional development.</p>
-<p>This is a learning tool, not a certification or comprehensive assessment of professional expertise. You can use it as often as you like, and nothing you do here is recorded.</p>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>This page documents how the Open Scholarship Knowledge Check and its question bank were developed. It covers the technical design of the site, the use of generative AI during drafting, the manual review process, the scope of the question bank, and how the questions can be reused or improved.</p>
+<p>The purpose of documenting this process is not to suggest that the question bank is infallible. Open scholarship policies, services, terminology, and infrastructure continue to change. Instead, the aim is to make the project transparent, reviewable, and correctable.</p>
 </section>
-<section id="why-this-exists" class="level2">
-<h2 class="anchored" data-anchor-id="why-this-exists">Why this exists</h2>
-<p>There is no shortage of well-curated open scholarship material to read. Primers, guides, LibGuides, curated link lists, training modules, and community glossaries cover the introductory layer well, and much of that material is excellent. What I think is missing is a way to check whether any of it stuck.</p>
-<p>Reading a clear explanation of the difference between green and gold open access can feel like understanding it, but being asked to explain that difference from memory is a different exercise, and often a more revealing one. This gap between recognising an answer and being able to recall it is one reason the knowledge check includes both <strong>multiple-choice</strong> and <strong>short-answer</strong> modes.</p>
-<p>The scope of open scholarship also presents a challenge. Librarians and research support professionals may be expected to advise on identifiers, licensing, publishing models, funder policies, repositories, research assessment, integrity, research data, reproducibility, and infrastructure. The details change regularly, and there are relatively few low-stakes opportunities to identify areas that may need refreshing before they arise in a consultation, workshop, or project.</p>
-<p>In this site, getting an answer wrong here costs nothing. Instead, each question is an opportunity to review an explanation, revisit a concept, and find a resource for further learning.</p>
+<section id="technical-design" class="level2">
+<h2 class="anchored" data-anchor-id="technical-design">Technical design</h2>
+<p>I developed this project with assistance from Claude Opus 4.8, using Quarto and Observable JS (OJS). Questions are stored in a single CSV file in the project repository <code>data/questions.csv</code>. The file is loaded in your browser when the quiz opens. The site does not require a server, database, or user account.</p>
 </section>
-<section id="about-the-creator" class="level2">
-<h2 class="anchored" data-anchor-id="about-the-creator">About the creator</h2>
-<p>I am <a href="https://bellaratmelia.github.io/">Bella Ratmelia</a>, a librarian based in Singapore working in support, open scholarship, and computational research skills. This project grew out of my work supporting and teaching researchers, librarians, and research support professionals.</p>
-<p>I developed and maintain this project independently. It does not represent an institutional assessment, endorsement, or certification.</p>
+<section id="question-development-and-ai" class="level2">
+<h2 class="anchored" data-anchor-id="question-development-and-ai">Question development and AI</h2>
+<p>The initial question bank was drafted with Claude Opus 4.8 and Fable 5, although Fable declined to continue partway through the process. The AI-assisted drafts included early versions of the questions, multiple-choice options, explanations, and source URLs.</p>
 </section>
-<section id="how-it-works" class="level2">
-<h2 class="anchored" data-anchor-id="how-it-works">How it works</h2>
-<ol type="1">
-<li>Choose an <strong>answer format</strong>, one <strong>difficulty level</strong>, and one or more <strong>topic areas</strong>.</li>
-<li>Answer the matching questions one at a time.
+<section id="review-and-quality-checks" class="level2">
+<h2 class="anchored" data-anchor-id="review-and-quality-checks">Review and quality checks</h2>
+<p>I then reviewed the questions by hand, one by one. This involved checking that each source supported the answer, revising the wording and distractors, and assessing whether each question was appropriate for its assigned difficulty level. In particular:</p>
 <ul>
-<li>In <strong>multiple-choice</strong> mode, choose the best answer from five options. Your answers are scored automatically.</li>
-<li>In <strong>short-answer</strong> mode, write an answer from memory, compare it with the model answer, and grade your own response. This format tests recall rather than recognition.</li>
-</ul></li>
-<li>After each response, review the correct answer, an explanation, and, where available, a link to authoritative further reading.</li>
-<li>At the end, view your score and, if you selected more than one topic area, a breakdown by area.</li>
-</ol>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Questions are selected randomly from those matching your chosen level and topic areas. A score therefore reflects your performance on the questions included in that session. <strong>It should not be interpreted as a certification or complete measure of professional knowledge.</strong></p>
-</div>
-</div>
-</section>
-<section id="difficulty-levels" class="level2">
-<h2 class="anchored" data-anchor-id="difficulty-levels">Difficulty levels</h2>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Level</th>
-<th>Focus</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>Beginner</strong></td>
-<td>Foundational concepts, definitions, and terminology.</td>
-</tr>
-<tr class="even">
-<td><strong>Intermediate</strong></td>
-<td>How concepts work, how they are applied, and how they connect.</td>
-</tr>
-<tr class="odd">
-<td><strong>Expert</strong></td>
-<td>Nuanced distinctions, standards, policies, and comparisons between related tools or approaches.</td>
-</tr>
-</tbody>
-</table>
-<p>Difficulty describes the complexity of the questions, not the professional status of the person answering them.</p>
+<li>Each question includes a <code>source_url</code> pointing to documentation consulted during its development.</li>
+<li>Each source link was opened and checked rather than assumed to be accurate or relevant.</li>
+<li>Questions, answer options, explanations, difficulty levels, topic areas, and concept tags were reviewed and revised manually.</li>
+<li>Answer options were checked for plausibility, clarity, phrasing, and comparable length.</li>
+<li>Wording was corrected where the initial drafts were vague, misleading, outdated, or inaccurate.</li>
+</ul>
+<p>The question bank is not assumed to be infallible. Policies, services, terminology, and infrastructure in open scholarship continue to change. The aim is therefore to make the question bank transparent, reviewable, and correctable.</p>
 </section>
 <section id="topic-areas" class="level2">
 <h2 class="anchored" data-anchor-id="topic-areas">Topic areas</h2>
-<ul>
-<li><p><strong>Open Access:</strong> Principles, publishing models, licences, policies, repositories, and economic arrangements that shape access to and reuse of scholarly publications.</p></li>
-<li><p><strong>Preprints &amp; Peer Review:</strong> Early sharing of research and the processes, models, and platforms used to evaluate, review, certify, and curate scholarly work.</p></li>
-<li><p><strong>Persistent Identifiers &amp; Metadata:</strong> Identifiers and metadata that distinguish researchers, organisations, outputs, projects, and other research entities, and connect them reliably across scholarly systems.</p></li>
-<li><p><strong>Open Scholarly Infrastructure:</strong> Services, standards, platforms, organisations, and governance arrangements that support the creation, discovery, connection, access, and preservation of scholarly knowledge.</p></li>
-<li><p><strong>Research Data Management:</strong> Planning, organising, documenting, storing, protecting, sharing, preserving, and governing research data throughout and beyond the research lifecycle.</p></li>
-<li><p><strong>Research Software:</strong> Practices for developing, licensing, documenting, sharing, citing, reviewing, preserving, and sustaining software created or used in research.</p></li>
-<li><p><strong>Reproducibility &amp; Open Methods:</strong> Practices that make research plans, methods, materials, analyses, and computational environments transparent, assessable, and reproducible.</p></li>
-<li><p><strong>Research Assessment &amp; Metrics:</strong> Quantitative indicators, qualitative approaches, and reform principles used to evaluate research outputs, contributions, researchers, and institutions.</p></li>
-<li><p><strong>Research Integrity &amp; Ethics:</strong> Principles and practices that support responsible research and publication, including ethical oversight, authorship, disclosure, prevention of misconduct, and correction of the scholarly record.</p></li>
-</ul>
+<p>The question bank is organised into nine topic areas, spanning open access, preprints and peer review, persistent identifiers and metadata, open scholarly infrastructure, research data management, research software, reproducibility and open methods, research assessment and metrics, and research integrity and ethics. Each question is assigned to exactly one area, with finer-grained concept tags recorded alongside it. For the full list with descriptions, see <a href="./about.html#topic-areas">Topic areas</a> on the About page.</p>
 </section>
-<section id="using-it-for-teaching" class="level2">
-<h2 class="anchored" data-anchor-id="using-it-for-teaching">Using it for teaching</h2>
-<p>The knowledge check can be used individually or incorporated into teaching and professional development. For example, facilitators might use selected questions to begin a discussion, check understanding during a workshop, revisit concepts after training, or identify topics that a team would like to explore further.</p>
-<p>Questions can be filtered by topic area and difficulty level, making it possible to create an activity suited to a particular audience. Because questions include explanations and links to further reading, they can also serve as starting points for discussion rather than being used only for scoring.</p>
-<p>The question bank is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
-</section>
-<section id="privacy" class="level2">
-<h2 class="anchored" data-anchor-id="privacy">Privacy</h2>
-<p>There is no login, analytics, or storage of your answers. Your selections and responses remain in your current browser session. Refreshing the page resets the quiz.</p>
-</section>
-<section id="feedback-and-contributions" class="level2">
-<h2 class="anchored" data-anchor-id="feedback-and-contributions">Feedback and contributions</h2>
-<p>Feedback on the questions, explanations, interface, accessibility, or overall learning experience is welcome.</p>
-<p>To report an inaccuracy, suggest an improvement, or contribute to the project, please <a href="https://github.com/bellaratmelia/os-knowledge-check/issues">use the Issues tab in the GitHub repository</a>.</p>
+<section id="maintenance-and-contribution" class="level2">
+<h2 class="anchored" data-anchor-id="maintenance-and-contribution">Maintenance and contribution</h2>
+<p>If you find an error, ambiguous question, or outdated source, please <a href="https://github.com/bellaratmelia/os-knowledge-check/issues">open an issue on GitHub</a>. You can also propose a change by editing <code>data/questions.csv</code> and submitting a pull request.</p>
 
 
 </section>
