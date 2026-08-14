@@ -1,4 +1,4 @@
-# Open Science & Scholarly Publishing — Self-Assessment Quiz
+# Open Scholarship Knowledge Check
 
 A static, self-assessment quiz on open science and scholarly publishing, built
 with [Quarto](https://quarto.org) and Observable JS (OJS). The whole question bank lives in one CSV file, so
@@ -39,28 +39,29 @@ add one row per question. Commit and push — that's the entire workflow.
 | `id` | yes | Unique question ID (e.g. `PID-012`). |
 | `level` | yes | Exactly one of: `Beginner`, `Intermediate`, `Expert`, `Master`. |
 | `area` | yes | The primary topic area. Must match one of the areas below **exactly**. |
+| `tags` | optional | One to three specific concepts the question tests, semicolon-separated (e.g. `metadata; repositories`). A finer axis than `area`; shown to users after they answer. |
 | `question` | yes | The question text. |
 | `option_a` … `option_e` | yes | The five answer options. Provide all five. |
 | `correct_option` | yes | The letter of the correct option: `a`, `b`, `c`, `d`, or `e`. |
 | `explanation_correct` | yes | Why the correct answer is correct (shown after answering). |
 | `source_url` | optional | Link to authoritative further reading. Leave blank if none. |
 | `review_note` | optional | Internal note flagging a fact to re-verify. **Never shown to users.** |
+| `mcq_only` | optional | Set to `yes` to exclude the question from short-answer mode (for questions that only make sense alongside their options, e.g. "which of these is a valid DOI?"). Leave blank otherwise. |
 
 ### The fixed topic areas
 
 The `area` value must be one of these strings (they drive the topic checkboxes):
 
 ```
-Persistent Identifiers
+Persistent Identifiers & Metadata
 Research Data Management
 Open Access
 Research Assessment & Metrics
-Research Integrity
+Research Integrity & Ethics
 Reproducibility & Open Methods
-Scholarly Infrastructure & Organizations
+Open Scholarly Infrastructure
 Preprints & Peer Review
-Open Source & Software
-Policy & Funder Mandates
+Research Software
 ```
 
 If you add a question whose `area` is not in this list, it is **hidden** and a
@@ -91,5 +92,6 @@ Code in this repository (Quarto templates, build scripts, and site
 infrastructure) is licensed under the [MIT License](LICENSE).
 
 Quiz content (questions, answer options, and explanations) is licensed 
-under [CC BY 4.0](LICENSE-CONTENT.md). If you reuse or adapt the question 
-bank, please credit and link back to this repository.
+under [CC BY-SA 4.0](LICENSE-CONTENT). If you reuse or adapt the question 
+bank, please credit and link back to this repository, and share any 
+adaptations under the same license.

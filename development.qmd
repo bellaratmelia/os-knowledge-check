@@ -1,0 +1,42 @@
+---
+title: "How this project was developed"
+pagetitle: "Development"
+title-block-banner: true
+title-block-banner-color: "white"
+---
+
+## Overview
+
+This page documents how the Open Scholarship Knowledge Check and its question bank were developed. It covers the technical design of the site, the use of generative AI during drafting, the manual review process, the scope of the question bank, and how the questions can be reused or improved.
+
+The purpose of documenting this process is not to suggest that the question bank is infallible. Open scholarship policies, services, terminology, and infrastructure continue to change. Instead, the aim is to make the project transparent, reviewable, and correctable.
+
+## Technical design
+
+I developed this project with assistance from Claude Opus 4.8, using Quarto and Observable JS (OJS). Questions are stored in a single CSV file in the project repository `data/questions.csv`. The file is loaded in your browser when the quiz opens. The site does not require a server, database, or user account.
+
+## Question development and AI
+
+The initial question bank was drafted with Claude Opus 4.8 and Fable 5, although Fable declined to continue partway through the process. The AI-assisted drafts included early versions of the questions, multiple-choice options, explanations, and source URLs.
+
+## Review and quality checks
+
+I then reviewed the questions by hand, one by one. This involved checking that each source supported the answer, revising the wording and distractors, and assessing whether each question was appropriate for its assigned difficulty level. In particular:
+
+- Each question includes a `source_url` pointing to documentation consulted during its development.
+- Each source link was opened and checked rather than assumed to be accurate or relevant.
+- Questions, answer options, explanations, difficulty levels, topic areas, and concept tags were reviewed and revised manually.
+- Answer options were checked for plausibility, clarity, phrasing, and comparable length.
+- Wording was corrected where the initial drafts were vague, misleading, outdated, or inaccurate.
+
+The question bank is not assumed to be infallible. Policies, services, terminology, and infrastructure in open scholarship continue to change. The aim is therefore to make the question bank transparent, reviewable, and correctable.
+
+## Topic areas
+
+The question bank is organised into nine topic areas, spanning open access, preprints and peer review, persistent identifiers and metadata, open scholarly infrastructure, research data management, research software, reproducibility and open methods, research assessment and metrics, and research integrity and ethics. Each question is assigned to exactly one area, with finer-grained concept tags recorded alongside it. For the full list with descriptions, see [Topic areas](about.qmd#topic-areas) on the About page.
+
+## Maintenance and contribution
+
+If you find an error, ambiguous question, or outdated source, please [open an issue on GitHub](https://github.com/bellaratmelia/os-knowledge-check/issues). You can also propose a change by editing `data/questions.csv` and submitting a pull request.
+
+

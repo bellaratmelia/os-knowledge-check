@@ -8,6 +8,45 @@ by topic area and difficulty level — useful for proofreading the question bank
 the answer key or explanations getting in the way. Correct answers and explanations are
 intentionally omitted; open the CSV directly if you need those.
 
+```{r}
+#| echo: false
+#| warning: false
+#| fig-width: 12
+#| fig-height: 7
+
+library(tidyverse)
+
+questions_list <- read_csv("data/questions.csv")
+questions_list |>
+  select(id, level, area) |>
+  mutate(level = factor(level, levels = c("Beginner", "Intermediate", "Expert"))) |>  # sets the plotting order
+  ggplot(aes(x = area, fill = level)) +
+  geom_bar(position = position_dodge(width = 0.9)) +
+  geom_text(
+    stat = "count",
+    aes(label = after_stat(count)),
+    position = position_dodge(width = 0.9),
+    vjust = -0.5
+  ) +
+  scale_fill_manual(values = c(
+    "Beginner" = "#A8D5BA",
+    "Intermediate" = "#5B9279",
+    "Expert" = "#1B4332"
+  )) +
+  labs(
+    title = "Question Counts by Area and Level",
+    x = "Area",
+    y = "Count",
+    fill = "Level"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 12),
+    plot.title = element_text(size = 18)
+  )
+```
+
+
 ```{ojs}
 //| echo: false
 //| output: false
@@ -30,18 +69,17 @@ viewAll = {
   // Same fixed area order used by the quiz app (index.qmd), so both pages present
   // topics in the same human-chosen sequence rather than alphabetically.
   const AREA_ORDER = [
-    "Persistent Identifiers",
+    "Persistent Identifiers & Metadata",
     "Research Data Management",
     "Open Access",
     "Research Assessment & Metrics",
-    "Research Integrity",
+    "Research Integrity & Ethics",
     "Reproducibility & Open Methods",
-    "Scholarly Infrastructure & Organizations",
+    "Open Scholarly Infrastructure",
     "Preprints & Peer Review",
-    "Open Source & Software",
-    "Policy & Funder Mandates"
+    "Research Software"
   ];
-  const LEVELS = ["Beginner", "Intermediate", "Expert", "Master"];
+  const LEVELS = ["Beginner", "Intermediate", "Expert"];
   const OPTION_LETTERS = ["a", "b", "c", "d", "e"];
 
   // Sort a copy of the rows by area, then level, then id, so the page reads as a

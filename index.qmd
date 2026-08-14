@@ -1,20 +1,25 @@
 ---
-title: "Open Science Knowledge Checker"
-subtitle: "Test your knowledge on persistent identifiers, open access, research assessment, scholarly infrastructure, and related topics."
+title: "Open Scholarship Knowledge Check"
+subtitle: "A self-assessment for librarians, research support professionals, and researchers interested in open scholarship."
 pagetitle: "Home"
 title-block-banner: true
 title-block-banner-color: "white"
 ---
 
-Pick how you want to answer, a difficulty level, and the topics you care about.
-You'll get one question at a time, with an explanation and a link to further
-reading after each one. **Nothing is recorded, and you can retake it as often as
-you like.**
+Open scholarship spans policies, infrastructure, publishing practices, identifiers, and assessment frameworks. Many professionals encounter these concepts regularly but rarely have an opportunity to assess their understanding in a structured way.
 
-For where the questions come from, why this exists, and how it was built, see
-[About](about.qmd).
+This project provides a low-stakes way to explore what you already know and where you might want to learn more. The goal is to help you identify what you already know, uncover gaps in your understanding, and discover resources for further learning. Questions cover topics such as persistent identifiers, open access, research assessment, scholarly infrastructure, and related areas of scholarly communication.
 
-## Start a Quiz!
+## How it works
+
+1. Choose a difficulty level.
+2. Select one or more topic areas.
+3. Answer the questions.
+4. Review explanations and suggested resources.
+
+Nothing is tracked or stored. This is a learning tool, not a certification.
+
+## Take the quiz
 
 ```{ojs}
 //| echo: false
@@ -55,26 +60,44 @@ quizApp = {
 
   // A one-line description of each level, shown to help users choose.
   const LEVEL_HINTS = {
-    "Beginner": "Foundational definitions — “what is X”.",
-    "Intermediate": "How things work and how pieces connect.",
-    "Expert": "Nuanced distinctions, standards, comparing similar tools."
+    "Beginner": "Foundational concepts, definitions, and terminology.",
+    "Intermediate": "How concepts work, how they are applied, and how they connect.",
+    "Expert": "Nuanced distinctions, standards, policies, and comparisons between related tools or approaches."
   };
 
   // The topic areas, in display order. These MUST match the `area` values in the
   // CSV exactly. Any area found in the CSV but missing here would be dropped, so
   // we also warn (in the console) if that happens, to catch typos when editing.
+  // The order is thematic — dissemination, then the identity/infrastructure
+  // layer, then research outputs and practice, then evaluation and conduct — and
+  // is kept in sync with the "Topic areas" list on the About page.
   const AREA_ORDER = [
-    "Persistent Identifiers",
-    "Research Data Management",
     "Open Access",
-    "Research Assessment & Metrics",
-    "Research Integrity",
-    "Reproducibility & Open Methods",
-    "Scholarly Infrastructure & Organizations",
     "Preprints & Peer Review",
-    "Open Source & Software",
-    "Policy & Funder Mandates"
+    "Persistent Identifiers & Metadata",
+    "Open Scholarly Infrastructure",
+    "Research Data Management",
+    "Research Software",
+    "Reproducibility & Open Methods",
+    "Research Assessment & Metrics",
+    "Research Integrity & Ethics"
   ];
+
+  // A one-line description of each area, shown under its name on the landing
+  // screen so users can tell the areas apart before choosing. Kept identical to
+  // the fuller "Topic areas" wording on the About page (which is the canonical
+  // home); if you edit one, edit the other.
+  const AREA_DESCRIPTIONS = {
+    "Open Access": "Principles, publishing models, licences, policies, repositories, and economic arrangements that shape access to and reuse of scholarly publications.",
+    "Preprints & Peer Review": "Early sharing of research and the processes, models, and platforms used to evaluate, review, certify, and curate scholarly work.",
+    "Persistent Identifiers & Metadata": "Identifiers and metadata that distinguish researchers, organisations, outputs, projects, and other research entities, and connect them reliably across scholarly systems.",
+    "Open Scholarly Infrastructure": "Services, standards, platforms, organisations, and governance arrangements that support the creation, discovery, connection, access, and preservation of scholarly knowledge.",
+    "Research Data Management": "Planning, organising, documenting, storing, protecting, sharing, preserving, and governing research data throughout and beyond the research lifecycle.",
+    "Research Software": "Practices for developing, licensing, documenting, sharing, citing, reviewing, preserving, and sustaining software created or used in research.",
+    "Reproducibility & Open Methods": "Practices that make research plans, methods, materials, analyses, and computational environments transparent, assessable, and reproducible.",
+    "Research Assessment & Metrics": "Quantitative indicators, qualitative approaches, and reform principles used to evaluate research outputs, contributions, researchers, and institutions.",
+    "Research Integrity & Ethics": "Principles and practices that support responsible research and publication, including ethical oversight, authorship, disclosure, prevention of misconduct, and correction of the scholarly record."
+  };
 
   // Maximum number of questions in a single session. If more questions match the
   // chosen filters, we randomly sample this many so sessions stay a reasonable
@@ -89,12 +112,12 @@ quizApp = {
     {
       id: "mcq",
       title: "Multiple choice",
-      hint: "Pick the best answer from five options. Scored automatically."
+      hint: "Choose the best answer from five options. Your answers are scored automatically."
     },
     {
       id: "short",
       title: "Short answer (self-graded)",
-      hint: "Write your answer from memory, then compare it with the model answer and mark yourself. Harder — it tests recall, not recognition."
+      hint: "Write an answer from memory, compare it with the model answer, and grade your own response. This format is more challenging because it tests recall rather than recognition."
     }
   ];
 
@@ -167,6 +190,41 @@ quizApp = {
     return node;
   }
 
+  // -- Tags (concepts tested) -------------------------------------------------
+  // Tags are a separate axis from `area`: area is the one broad home for a
+  // question, tags are the 1-3 specific concepts it tests (semicolon-separated
+  // in the CSV, authored in primary → secondary → cross-cutting order). They are
+  // shown only AFTER the user answers — as a learning signal, never as a filter
+  // or a pre-answer hint, since naming the concept would narrow the guess.
+
+  // Split a question's `tags` cell into a clean, ordered array.
+  function tagsOf(q) {
+    return String(q.tags || "").split(";").map(s => s.trim()).filter(Boolean);
+  }
+
+  // Turn a kebab-case slug into a human label: sentence case, but keep known
+  // acronyms upper-cased wherever they appear ("ai-use" → "AI use").
+  const TAG_ACRONYMS = { ai: "AI", fair: "FAIR" };
+  function humanizeTag(t) {
+    return t.split("-").map((word, i) => {
+      if (TAG_ACRONYMS[word]) return TAG_ACRONYMS[word];
+      return i === 0 ? word.charAt(0).toUpperCase() + word.slice(1) : word;
+    }).join(" ");
+  }
+
+  // Build a "Concepts tested: …" line of chips for a question, or null if it
+  // has no tags. Returned detached so each caller decides where to place it.
+  function makeConceptList(q) {
+    const tags = tagsOf(q);
+    if (!tags.length) return null;
+    const wrap = el("p", { className: "qa-concepts" });
+    wrap.append(el("span", { className: "qa-concepts-label", text: "Concepts tested:" }));
+    for (const t of tags) {
+      wrap.append(el("span", { className: "qa-chip", text: humanizeTag(t) }));
+    }
+    return wrap;
+  }
+
   // -- Screen 1: Landing / filter selection -----------------------------------
   function renderLanding() {
     root.innerHTML = "";
@@ -175,7 +233,7 @@ quizApp = {
     // out, so they cannot go stale as questions are added.
     const stats = el("p", { className: "qa-stats" });
     for (const bit of [
-      `${questions.length} questions`,
+      `${questions.length} questions in the bank`,
       `${areasPresent.length} topic areas`,
       `${LEVELS.length} difficulty levels`,
       "nothing is saved"
@@ -186,7 +244,7 @@ quizApp = {
 
     // --- Answering mode (single-select via radio buttons) ---
     const modeField = el("fieldset", { className: "qa-fieldset" });
-    modeField.append(el("legend", { text: "1. Choose how you want to answer" }));
+    modeField.append(el("legend", { text: "1. Choose an answer format" }));
     for (const mode of MODES) {
       const id = "mode-" + mode.id;
       const wrap = el("label", { className: "qa-choice", attrs: { for: id } });
@@ -245,7 +303,7 @@ quizApp = {
     // Convenience: select-all / clear-all controls.
     const areaControls = el("div", { className: "qa-area-controls" });
     const selectAll = el("button", { className: "qa-link-btn", text: "Select all", attrs: { type: "button" } });
-    const clearAll = el("button", { className: "qa-link-btn", text: "Clear all", attrs: { type: "button" } });
+    const clearAll = el("button", { className: "qa-link-btn", text: "Clear selection", attrs: { type: "button" } });
     selectAll.addEventListener("click", () => { state.areas = new Set(areasPresent); renderLanding(); });
     clearAll.addEventListener("click", () => { state.areas.clear(); renderLanding(); });
     areaControls.append(selectAll, clearAll);
@@ -267,13 +325,17 @@ quizApp = {
 
       const textWrap = el("span", { className: "qa-choice-text" });
       textWrap.append(el("span", { className: "qa-choice-title", text: area }));
+      // A one-line description so users can tell the areas apart before choosing.
+      if (AREA_DESCRIPTIONS[area]) {
+        textWrap.append(el("span", { className: "qa-choice-desc", text: AREA_DESCRIPTIONS[area] }));
+      }
       // Show how many questions exist for this area at the chosen level (if any).
       const count = state.level
         ? questions.filter(q => q.area === area && q.level === state.level && usableInMode(q)).length
         : questions.filter(q => q.area === area && usableInMode(q)).length;
       textWrap.append(el("span", {
         className: "qa-choice-hint",
-        text: state.level ? `${count} ${state.level} question${count === 1 ? "" : "s"}` : `${count} questions total`
+        text: state.level ? `${count} ${state.level} question${count === 1 ? "" : "s"}` : `${count} questions available`
       }));
 
       wrap.append(input, textWrap);
@@ -305,8 +367,8 @@ quizApp = {
       } else {
         const asked = Math.min(n, MAX_QUESTIONS);
         countMsg.textContent = asked < n
-          ? `${n} questions match. You'll be asked a random ${asked}.`
-          : `${n} question${n === 1 ? "" : "s"} match — you'll be asked all of them.`;
+          ? `${n} questions match your selection. Your quiz will include ${asked} questions selected at random.`
+          : `${n} question${n === 1 ? "" : "s"} match. Your quiz will include all of them.`;
         startBtn.disabled = false;
       }
     }
@@ -452,6 +514,10 @@ quizApp = {
         feedback.append(src);
       }
 
+      // Concepts tested — same learning signal as MCQ mode, shown at reveal.
+      const concepts = makeConceptList(q);
+      if (concepts) feedback.append(concepts);
+
       if (gaveUp) {
         recordShortAnswer(q, box.value, false);
         return;
@@ -545,7 +611,7 @@ quizApp = {
     const heading = el("p", { className: "qa-feedback-heading" });
     // Icon + word so the result is not conveyed by colour alone.
     heading.append(el("span", { className: "qa-feedback-icon", attrs: { "aria-hidden": "true" }, text: isCorrect ? "✓" : "✗" }));
-    heading.append(el("span", { text: isCorrect ? "Correct" : "Incorrect" }));
+    heading.append(el("span", { text: isCorrect ? "Correct" : "Not quite" }));
     feedback.append(heading);
 
     // Explain why the correct answer is correct only when the user got it right;
@@ -553,7 +619,8 @@ quizApp = {
     if (isCorrect) {
       feedback.append(el("p", { className: "qa-explanation", text: q.explanation_correct }));
     } else {
-      feedback.append(el("p", { className: "qa-explanation qa-explanation-why", text: "That's not the correct answer; try again!" }));
+      feedback.append(el("p", { className: "qa-explanation qa-explanation-why", text: "The correct answer is highlighted above." }));
+      feedback.append(el("p", { className: "qa-explanation", text: q.explanation_correct }));
     }
 
     // Optional link to further reading.
@@ -563,6 +630,11 @@ quizApp = {
       src.append(link);
       feedback.append(src);
     }
+
+    // Concepts tested — a post-answer learning signal. Shown whether the answer
+    // was right or wrong, since the question is locked either way now.
+    const concepts = makeConceptList(q);
+    if (concepts) feedback.append(concepts);
 
     // Next / Finish button.
     feedback.append(makeAdvanceButton());
@@ -667,6 +739,8 @@ quizApp = {
         }));
       }
       item.append(el("p", { className: "qa-review-exp", text: q.explanation_correct }));
+      const concepts = makeConceptList(q);
+      if (concepts) item.append(concepts);
       details.append(item);
     }
     root.append(details);

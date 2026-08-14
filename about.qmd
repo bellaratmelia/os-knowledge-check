@@ -1,5 +1,5 @@
 ---
-title: "About Open Science Knowledge Checker"
+title: "About the Open Scholarship Knowledge Check"
 pagetitle: "About"
 title-block-banner: true
 title-block-banner-color: "white"
@@ -7,108 +7,87 @@ title-block-banner-color: "white"
 
 ## What this is
 
-This is a **self-assessment quiz** on open science and scholarly publishing,
-aimed primarily at scholarly communications librarians, but useful to
-researchers, research infrastructure providers, and technologists who work in
-this space. It is a learning tool, not a test with stakes: nothing is recorded,
-and you can retake it as often as you like.
+The **Open Scholarship Knowledge Check** is a low-stakes self-assessment for exploring your understanding of open scholarship, scholarly communication, and research infrastructure.
+
+It is designed primarily for librarians and research support professionals, but may also be useful to researchers, infrastructure providers, technologists, and others working in this area. The aim is to help you identify what you already know, uncover gaps in your understanding, and discover reliable resources for further learning. 
+
+The question bank can also be used as a teaching resource. Educators, librarians, and trainers are welcome to draw on it for workshops, classroom activities, team discussions, or informal professional development. 
+
+This is a learning tool, not a certification or comprehensive assessment of professional expertise. You can use it as often as you like, and nothing you do here is recorded.
 
 ## Why this exists
 
-There is no shortage of good open science material to read. Primers, guides,
-LibGuides, curated link lists, training modules, community glossaries — the
-introductory layer is well covered, and much of it is excellent.
+There is no shortage of well-curated open scholarship material to read. Primers, guides, LibGuides, curated link lists, training modules, and community glossaries cover the introductory layer well, and much of that material is excellent. What I think is missing is a way to check whether any of it stuck.
 
-What is harder to find is somewhere to check whether any of it stuck.
+Reading a clear explanation of the difference between green and gold open access can feel like understanding it, but being asked to explain that difference from memory is a different exercise, and often a more revealing one. This gap between recognising an answer and being able to recall it is one reason the knowledge check includes both **multiple-choice** and **short-answer** modes.
 
-Reading a clear explanation of the difference between green and gold open access
-feels a lot like understanding it. Being asked to produce that difference cold,
-without the options in front of you, is a different exercise — and usually a
-more honest one. That gap between recognising an answer and being able to recall
-it is the gap this site is built around, which is also why **short answer** mode
-exists alongside multiple choice.
+The scope of open scholarship also presents a challenge. Librarians and research support professionals may be expected to advise on identifiers, licensing, publishing models, funder policies, repositories, research assessment, integrity, research data, reproducibility, and infrastructure. The details change regularly, and there are relatively few low-stakes opportunities to identify areas that may need refreshing before they arise in a consultation, workshop, or project.
 
-The audience shapes it too. Scholarly communications work has an unusually wide
-surface: identifiers, licensing, funder mandates, repository practice,
-metrics, integrity policy, research data. People are expected to advise
-confidently across all of it, the details shift constantly, and there are few
-low-stakes ways to find the soft spots before someone asks you a question at a
-consultation. Getting one wrong here costs nothing.
+In this site, getting an answer wrong here costs nothing. Instead, each question is an opportunity to review an explanation, revisit a concept, and find a resource for further learning.
+
+## About the creator
+
+I am [Bella Ratmelia](https://bellaratmelia.github.io/), a librarian based in Singapore working in support, open scholarship, and computational research skills. This project grew out of my work supporting and teaching researchers, librarians, and research support professionals.
+
+I developed and maintain this project independently. It does not represent an institutional assessment, endorsement, or certification.
 
 ## How it works
 
-1. Choose an **answering mode**, one **difficulty level**, and one or more
-   **topic areas**.
-2. Answer the matching questions one at a time. In **multiple choice** mode you
-   pick from five options and are scored automatically. In **short answer** mode
-   you write your answer from memory, then compare it against the model answer
-   and mark yourself — harder, because it tests recall rather than recognition.
-3. After each answer you see the correct answer, an explanation, and
-   (where available) a link to authoritative further reading.
-4. At the end you get a score and, if you picked more than one area, a
-   breakdown by area. Nothing you do here is saved: there are no accounts, no tracking, and refreshing the page starts a fresh session.
+1. Choose an **answer format**, one **difficulty level**, and one or more **topic areas**.
+2. Answer the matching questions one at a time.
+   - In **multiple-choice** mode, choose the best answer from five options. Your answers are scored automatically.
+   - In **short-answer** mode, write an answer from memory, compare it with the model answer, and grade your own response. This format tests recall rather than recognition.
+3. After each response, review the correct answer, an explanation, and, where available, a link to authoritative further reading.
+4. At the end, view your score and, if you selected more than one topic area, a breakdown by area.
 
-Questions live in a single CSV file in the project repository
-(`data/questions.csv`) and are loaded in your browser when the page opens. The
-site is fully static — there is no server, database, or account.
+::: {.callout-note}
+Questions are selected randomly from those matching your chosen level and topic areas. A score therefore reflects your performance on the questions included in that session. **It should not be interpreted as a certification or complete measure of professional knowledge.**
+:::
 
 ## Difficulty levels
 
 | Level | Focus |
 |---|---|
-| **Beginner** | Foundational definitions — "what is X" |
-| **Intermediate** | How things work and how pieces connect |
-| **Expert** | Nuanced distinctions, standards and policy detail, comparing similar tools |
+| **Beginner** | Foundational concepts, definitions, and terminology. |
+| **Intermediate** | How concepts work, how they are applied, and how they connect. |
+| **Expert** | Nuanced distinctions, standards, policies, and comparisons between related tools or approaches. |
+
+Difficulty describes the complexity of the questions, not the professional status of the person answering them.
 
 ## Topic areas
 
-- Persistent Identifiers (DOI, ORCID, ROR, RRID, IGSN, ARK, …)
-- Research Data Management (FAIR, CARE, DMPs, repositories)
-- Open Access (models, licensing, rights retention)
-- Research Assessment & Metrics (DORA, CoARA, Leiden Manifesto, JIF, h-index)
-- Research Integrity (misconduct definitions, COPE, retractions)
-- Reproducibility & Open Methods (preregistration, Registered Reports, TOP)
-- Scholarly Infrastructure & Organizations (Crossref, DataCite, OpenAlex, POSI, …)
-- Preprints & Peer Review (arXiv, bioRxiv, open review, overlay journals)
-- Open Source & Software (software citation, JOSS, Zenodo archiving)
-- Policy & Funder Mandates (Plan S, the 2022 OSTP memo, UNESCO, NIH DMS)
+- **Open Access:** Principles, publishing models, licences, policies, repositories, and economic arrangements that shape access to and reuse of scholarly publications.
 
-## Accuracy and sources
+- **Preprints & Peer Review:** Early sharing of research and the processes, models, and platforms used to evaluate, review, certify, and curate scholarly work.
 
-Questions were written using the referenced organisations' own documentation,
-FAQs, and policy pages rather than from memory, because terminology, governance,
-and scope in this area change over time. Each question carries a `source_url`
-pointing to the documentation consulted. **If you spot an error, please open an
-issue or edit `data/questions.csv` and submit a pull request.**
+- **Persistent Identifiers & Metadata:** Identifiers and metadata that distinguish researchers, organisations, outputs, projects, and other research entities, and connect them reliably across scholarly systems.
 
-## How this was built, and where AI comes into it
+- **Open Scholarly Infrastructure:** Services, standards, platforms, organisations, and governance arrangements that support the creation, discovery, connection, access, and preservation of scholarly knowledge.
 
-This site was built with substantial help from AI. That covers the code — a
-static [Quarto](https://quarto.org) site with the quiz itself written in
-Observable JS — and the first drafts of most questions, explanations, and the
-prose on this page.
+- **Research Data Management:** Planning, organising, documenting, storing, protecting, sharing, preserving, and governing research data throughout and beyond the research lifecycle.
 
-Saying so plainly seems better than the alternative, particularly to an audience
-that spends its working life on provenance and attribution. It also matters
-because a language model writing confident-sounding text about DOI governance or
-Plan S compliance is exactly the failure mode this site would be worst placed to
-have. So the drafts were treated as drafts:
+- **Research Software:** Practices for developing, licensing, documenting, sharing, citing, reviewing, preserving, and sustaining software created or used in research.
 
-- Questions were written against the referenced organisations' own
-  documentation, FAQs, and policy pages rather than from model memory.
-- Each question carries a `source_url` pointing to what was consulted, and those
-  links were checked rather than assumed.
-- Wording, difficulty levels, and topic assignments were revised by hand where
-  drafts were vague, subtly wrong, or confidently wrong.
+- **Reproducibility & Open Methods:** Practices that make research plans, methods, materials, analyses, and computational environments transparent, assessable, and reproducible.
 
-None of that makes the bank infallible — it makes it correctable, which is the
-more realistic goal. If something here is wrong, [please say so](https://github.com/bellaratmelia/os-knowledge-check/issues).
+- **Research Assessment & Metrics:** Quantitative indicators, qualitative approaches, and reform principles used to evaluate research outputs, contributions, researchers, and institutions.
+
+- **Research Integrity & Ethics:** Principles and practices that support responsible research and publication, including ethical oversight, authorship, disclosure, prevention of misconduct, and correction of the scholarly record.
+
+## Using it for teaching
+
+The knowledge check can be used individually or incorporated into teaching and professional development. For example, facilitators might use selected questions to begin a discussion, check understanding during a workshop, revisit concepts after training, or identify topics that a team would like to explore further.
+
+Questions can be filtered by topic area and difficulty level, making it possible to create an activity suited to a particular audience. Because questions include explanations and links to further reading, they can also serve as starting points for discussion rather than being used only for scoring.
+
+The question bank is licensed under a  [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). 
 
 ## Privacy
 
-There is no analytics, no login, and no storage of your answers. Refreshing the
-page resets everything.
+There is no login, analytics, or storage of your answers. Your selections and responses remain in your current browser session. Refreshing the page resets the quiz.
 
-## Feedback
+## Feedback and contributions
 
-If you spot any inaccuracies or have any feedback, comments, or suggestions, please feel free to [send them through Issues tab on the GitHub repo](https://github.com/bellaratmelia/os-knowledge-check/issues).
+Feedback on the questions, explanations, interface, accessibility, or overall learning experience is welcome.
+
+To report an inaccuracy, suggest an improvement, or contribute to the project, please [use the Issues tab in the GitHub repository](https://github.com/bellaratmelia/os-knowledge-check/issues).
