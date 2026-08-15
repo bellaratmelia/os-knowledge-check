@@ -1,6 +1,13 @@
-color:
-  background: "#0f0"
-  
+# Brand tokens for the Open Scholarship Knowledge Check.
+#
+# Quarto's brand system reliably applies the heading colours below and is
+# light/dark-mode aware, so they live here. The site's accent colour is set as
+# $primary in styles.scss instead: the Bootswatch theme (Zephyr) assigns
+# `$primary` with a Sass `!default` that, under Quarto's layer ordering, wins
+# over anything a brand `color.primary` would set — so the brand file cannot
+# drive Bootstrap's primary with this theme. See the note at the top of
+# styles.scss.
+
 typography:
   headings:
     color:

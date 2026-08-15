@@ -1,6 +1,29 @@
+/*-- scss:defaults --*/
+/* ==========================================================================
+   Brand colours and heading colours live in _brand.yml, which Quarto compiles
+   into Bootstrap's Sass variables ($primary, $headings-color, …). This file is
+   layered on top via `theme: [zephyr, styles.scss]` in _quarto.yml.
+
+   This `scss:defaults` block is where to override Bootstrap Sass variables that
+   the brand system does not expose (e.g. $border-radius, $link-decoration), so
+   they compile *before* Bootstrap rather than fighting it afterwards.
+   ========================================================================== */
+
+// Accent colour. The Bootswatch theme (Zephyr) declares `$primary: $blue
+// !default`, and Quarto layers that theme ahead of the brand, so its !default
+// wins and a brand `color.primary` never reaches Bootstrap. Setting $primary
+// here — a hard assignment, before Bootstrap compiles — is the reliable lever:
+// it drives the navbar, links, active TOC entries, Bootstrap buttons, and the
+// title banner. This is the ONE place to change the site's accent; keep the
+// --qa-primary token in the rules below in sync (the quiz widget's own colour,
+// with hand-tuned hover/tint variants that Bootstrap can't derive for us).
+$primary: #155e75;   // deep petrol teal
+
+
+/*-- scss:rules --*/
 /* ==========================================================================
    Styles for the Open Scholarship Knowledge Check quiz.
-   The site uses Quarto's "cosmo" Bootstrap theme; these rules style the custom
+   The site uses Quarto's "zephyr" Bootstrap theme; these rules style the custom
    quiz component (everything prefixed .qa-) on top of it.
    Design goals: clean, minimal, professional; comfortable on desktop and
    mobile; accessible (visible focus, high contrast, never colour alone).

@@ -7,36 +7,62 @@ title-block-banner-color: "white"
 
 ## Overview
 
-This page documents how the Open Scholarship Knowledge Check and its question bank were developed. It covers the technical design of the site, the use of generative AI during drafting, the manual review process, the scope of the question bank, and how the questions can be reused or improved.
+In the spirit of transparency and openness, this page documents how the Open Scholarship Knowledge Check and its question bank were developed. It covers the technical design of the site, the use of generative AI during drafting, the manual review process, the scope of the question bank, and how the questions can be reused or improved.
 
-The purpose of documenting this process is not to suggest that the question bank is infallible. Open scholarship policies, services, terminology, and infrastructure continue to change. Instead, the aim is to make the project transparent, reviewable, and correctable.
+Open scholarship policies, technologies, and practices will continue to change. The question bank will therefore continue to be refined and expanded over time.
 
 ## Technical design
 
-I developed this project with assistance from Claude Opus 4.8, using Quarto and Observable JS (OJS). Questions are stored in a single CSV file in the project repository `data/questions.csv`. The file is loaded in your browser when the quiz opens. The site does not require a server, database, or user account.
+I developed this project with assistance from Claude Opus 4.8, using Quarto and Observable JS (OJS).
 
-## Question development and AI
+Questions are stored in a single CSV file in the project repository, `data/questions.csv`. The file is loaded in the visitor's browser when the quiz opens. The site is fully static and does not require a server, database, or user account.
 
-The initial question bank was drafted with Claude Opus 4.8 and Fable 5, although Fable declined to continue partway through the process. The AI-assisted drafts included early versions of the questions, multiple-choice options, explanations, and source URLs.
+I may add basic visitor tracking in the future, purely to understand how many people use the quiz, such as by clicking the start button. If tracking is introduced, this page and the site's privacy information will be updated to explain what is collected and how it is used.
 
-## Review and quality checks
+## Question development
 
-I then reviewed the questions by hand, one by one. This involved checking that each source supported the answer, revising the wording and distractors, and assessing whether each question was appropriate for its assigned difficulty level. In particular:
+I used an LLM to search the web for relevant sources across a predefined list of ten open scholarship topics. I then used it to draft approximately 50 questions for each topic, together with multiple-choice options and explanations for the correct answers.
 
-- Each question includes a `source_url` pointing to documentation consulted during its development.
-- Each source link was opened and checked rather than assumed to be accurate or relevant.
-- Questions, answer options, explanations, difficulty levels, topic areas, and concept tags were reviewed and revised manually.
-- Answer options were checked for plausibility, clarity, phrasing, and comparable length.
-- Wording was corrected where the initial drafts were vague, misleading, outdated, or inaccurate.
+I initially used Claude Fable 5 for this drafting process. During the drafting process, it unexpectedly switched to Claude Opus 4.8 for reasons unknown to me. It consistently switched to Opus 4.8 whenever I tried to re-run the whole thing, so in the end, I just left them be. The AI-assisted drafts included early versions of the:
 
-The question bank is not assumed to be infallible. Policies, services, terminology, and infrastructure in open scholarship continue to change. The aim is therefore to make the question bank transparent, reviewable, and correctable.
+- questions;
+- multiple-choice options;
+- explanations;
+- difficulty levels;
+- topic areas;
+- source URLs; and
+- review note
 
-## Topic areas
+The initial draft contained approximately 500 questions across ten topics. Following quality checks and consolidation, the current question bank contains 495 questions across nine topic areas.
 
-The question bank is organised into nine topic areas, spanning open access, preprints and peer review, persistent identifiers and metadata, open scholarly infrastructure, research data management, research software, reproducibility and open methods, research assessment and metrics, and research integrity and ethics. Each question is assigned to exactly one area, with finer-grained concept tags recorded alongside it. For the full list with descriptions, see [Topic areas](about.qmd#topic-areas) on the About page.
+Each question is assigned to exactly one topic area, with more specific concept tags recorded alongside it. For the full list of areas and their descriptions, see [Topic areas](about.html#topic-areas).
 
-## Maintenance and contribution
+Each question is also assigned one of three difficulty levels: Beginner, Intermediate, or Expert. These levels are based on the project's difficulty rubric. See [Difficulty levels](about.html#difficulty-levels).
 
-If you find an error, ambiguous question, or outdated source, please [open an issue on GitHub](https://github.com/bellaratmelia/os-knowledge-check/issues). You can also propose a change by editing `data/questions.csv` and submitting a pull request.
+## Quality checks
 
+I reviewed all ~500 or so questions from the initial draft by hand, working through the question bank one topic area at a time and examining each question individually.
 
+I considered using smaller AI agents / skill to conduct parts of the quality check. However, many of the sources used in the question bank occasionally blocked Claude's web-fetching tools, which meant that it could not reliably access the underlying pages. More importantly, I wanted to read and assess every question myself as part of the review process.
+
+The review covered five main criteria:
+
+- **Source relevance**: I opened each `source_url` and checked whether it directly supported the specific claim being tested, rather than merely discussing the general topic. The initial AI-assisted drafts sometimes cited generic homepages, limited product pages, or dead links. Where possible, I replaced these with more precise and authoritative primary sources.
+
+- **Quality of distractors**: The answer options were checked against the structure of one correct answer, three strong distractors, and one weaker distractor. I manually revised distractors that were implausible, too obviously incorrect, or structurally similar to the correct answer in ways that unintentionally revealed it.
+
+- **Difficulty level**: I assessed each question against the difficulty rubric. Questions that required only the recall of a definition were reclassified from Intermediate or Expert to Beginner. Questions classified as Expert were expected to test nuanced distinctions, comparisons, or the application of more specialised knowledge.
+
+- **Absolute phrasing**: At the Intermediate and Expert levels, I checked answer options for absolute language such as "never", "always", "only", and "entirely". Where appropriate, I softened these statements so that the distractors represented plausible misconceptions that a learner might genuinely hold, rather than being easily eliminated because of their wording.
+
+- **Explanation accuracy**: I checked each correct-answer explanation against the cited source. Explanations that went beyond what the source supported, contradicted the source, or needed additional context were revised.
+
+- **Duplicate questions**: I also identified duplicate and near-duplicate questions that tested the same underlying fact. These were either removed or rewritten to test distinct concepts or subtopics. Unfortunately, I did not keep an exact count of how many questions were replaced or substantially rewritten during this process, but it should be about ~20 or so.
+
+Despite this review process, the question bank will still have questions that need to refined or could be worded better. And it will require continuous revision as open scholarship policies, services, terminology, technologies, and infrastructure continue to evolve. 
+
+## Maintenance and contributions
+
+If you find an error, ambiguous question, or outdated source, please https://github.com/bellaratmelia/os-knowledge-check/issues.
+
+You can also propose a change by editing `data/questions.csv` and submitting a pull request. Contributions that improve the accuracy, clarity, coverage, or accessibility of the question bank are very much welcome!

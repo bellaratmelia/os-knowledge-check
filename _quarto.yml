@@ -2,7 +2,7 @@
 # The site is a static Quarto "website" project, which renders to plain
 # HTML/CSS/JS in the output directory and can be published as-is on GitHub Pages.
 
-brand: brand/_brand.yml
+brand: _brand.yml
 project:
   type: website
   output-dir: _site
@@ -28,14 +28,21 @@ website:
         text: Quiz
       - href: about.qmd
         text: About
+      - href: development.qmd
+        text: Development  
     tools:
       - icon: github
         href: https://github.com/bellaratmelia/os-knowledge-check/  
 
 format:
   html:
-    theme: zephyr          # Clean, professional Bootstrap-based theme
-    css: styles.css       # Custom styles for the quiz component
+    # Zephyr is the Bootstrap base; styles.scss layers the custom quiz styling
+    # on top. Listing them as a theme array (rather than a separate `css:` file)
+    # lets styles.scss participate in Sass compilation, so it can read Bootstrap
+    # variables and the brand tokens from _brand.yml.
+    theme:
+      - zephyr
+      - styles.scss
     toc: true
     toc-location: left
     page-layout: article

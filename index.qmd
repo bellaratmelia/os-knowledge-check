@@ -21,6 +21,8 @@ Nothing is tracked or stored. This is a learning tool, not a certification.
 
 ## Take the quiz
 
+*Question bank is last reviewed on: 14 August 2026*
+
 ```{ojs}
 //| echo: false
 //| output: false
