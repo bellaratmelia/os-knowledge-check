@@ -11,6 +11,25 @@ intentionally omitted; open the CSV directly if you need those.
 ```{ojs}
 //| echo: false
 
+// Canonical topic-area order, matching the quiz on the home page (index.qmd).
+// The chart and the listing below both read from this, so the whole page runs
+// in the same sequence as the quiz. Keep in sync with AREA_ORDER in index.qmd.
+AREA_ORDER = [
+  "Open Access",
+  "Preprints & Peer Review",
+  "Persistent Identifiers & Metadata",
+  "Open Scholarly Infrastructure",
+  "Research Data Management",
+  "Research Software",
+  "Reproducibility & Open Methods",
+  "Research Assessment & Metrics",
+  "Research Integrity & Ethics"
+]
+```
+
+```{ojs}
+//| echo: false
+
 // Question counts by area and level, as a horizontal stacked bar chart.
 // This replaces an earlier R/ggplot version so the page needs no R engine at
 // render time — the CI deploy installs only Quarto, so any R chunk fails there.
@@ -24,7 +43,7 @@ Plot.plot({
   marginRight: 24,
   marginBottom: 44,
   x: { label: "Number of questions", grid: true },
-  y: { label: null },
+  y: { label: null, domain: AREA_ORDER },
   color: {
     legend: true,
     domain: ["Beginner", "Intermediate", "Expert"],
@@ -35,7 +54,7 @@ Plot.plot({
       questions,
       Plot.groupY(
         { x: "count" },
-        { y: "area", fill: "level", sort: { y: "-x" }, tip: true }
+        { y: "area", fill: "level", tip: true }
       )
     ),
     Plot.ruleX([0])
@@ -63,19 +82,9 @@ viewAll = {
     return node;
   }
 
-  // Same fixed area order used by the quiz app (index.qmd), so both pages present
-  // topics in the same human-chosen sequence rather than alphabetically.
-  const AREA_ORDER = [
-    "Persistent Identifiers & Metadata",
-    "Research Data Management",
-    "Open Access",
-    "Research Assessment & Metrics",
-    "Research Integrity & Ethics",
-    "Reproducibility & Open Methods",
-    "Open Scholarly Infrastructure",
-    "Preprints & Peer Review",
-    "Research Software"
-  ];
+  // AREA_ORDER (the quiz's topic order) is defined once as a top-level OJS cell
+  // above and shared with the chart, so the listing and the chart stay in the
+  // same sequence.
   const LEVELS = ["Beginner", "Intermediate", "Expert"];
   const OPTION_LETTERS = ["a", "b", "c", "d", "e"];
 
