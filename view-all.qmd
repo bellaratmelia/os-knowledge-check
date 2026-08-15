@@ -8,42 +8,39 @@ by topic area and difficulty level — useful for proofreading the question bank
 the answer key or explanations getting in the way. Correct answers and explanations are
 intentionally omitted; open the CSV directly if you need those.
 
-```{r}
-#| echo: false
-#| warning: false
-#| fig-width: 12
-#| fig-height: 7
+```{ojs}
+//| echo: false
 
-library(tidyverse)
-
-questions_list <- read_csv("data/questions.csv")
-questions_list |>
-  select(id, level, area) |>
-  mutate(level = factor(level, levels = c("Beginner", "Intermediate", "Expert"))) |>  # sets the plotting order
-  ggplot(aes(x = area, fill = level)) +
-  geom_bar(position = position_dodge(width = 0.9)) +
-  geom_text(
-    stat = "count",
-    aes(label = after_stat(count)),
-    position = position_dodge(width = 0.9),
-    vjust = -0.5
-  ) +
-  scale_fill_manual(values = c(
-    "Beginner" = "#A8D5BA",
-    "Intermediate" = "#5B9279",
-    "Expert" = "#1B4332"
-  )) +
-  labs(
-    title = "Question Counts by Area and Level",
-    x = "Area",
-    y = "Count",
-    fill = "Level"
-  ) +
-  theme_minimal() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1, size = 12),
-    plot.title = element_text(size = 18)
-  )
+// Question counts by area and level, as a horizontal stacked bar chart.
+// This replaces an earlier R/ggplot version so the page needs no R engine at
+// render time — the CI deploy installs only Quarto, so any R chunk fails there.
+// `questions` is loaded in the cell below; Observable JS is reactive, so
+// referencing it above its definition is fine. Observable Plot (`Plot`) ships
+// with Quarto's OJS runtime, so there is nothing extra to import.
+Plot.plot({
+  title: "Question counts by area and level",
+  width: 860,
+  marginLeft: 240,
+  marginRight: 24,
+  marginBottom: 44,
+  x: { label: "Number of questions", grid: true },
+  y: { label: null },
+  color: {
+    legend: true,
+    domain: ["Beginner", "Intermediate", "Expert"],
+    range: ["#A8D5BA", "#5B9279", "#1B4332"]
+  },
+  marks: [
+    Plot.barX(
+      questions,
+      Plot.groupY(
+        { x: "count" },
+        { y: "area", fill: "level", sort: { y: "-x" }, tip: true }
+      )
+    ),
+    Plot.ruleX([0])
+  ]
+})
 ```
 
 
