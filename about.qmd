@@ -1,8 +1,6 @@
 ---
 title: "About the Open Scholarship Knowledge Check"
 pagetitle: "About"
-title-block-banner: true
-title-block-banner-color: "white"
 ---
 
 ## What this is

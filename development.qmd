@@ -1,8 +1,7 @@
 ---
 title: "How this project was developed"
 pagetitle: "Development"
-title-block-banner: true
-title-block-banner-color: "white"
+
 ---
 
 ## Overview

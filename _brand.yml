@@ -1,15 +1,52 @@
 # Brand tokens for the Open Scholarship Knowledge Check.
 #
-# Quarto's brand system reliably applies the heading colours below and is
-# light/dark-mode aware, so they live here. The site's accent colour is set as
-# $primary in styles.scss instead: the Bootswatch theme (Zephyr) assigns
+# Quarto's brand system reliably applies the fonts and heading colours below and
+# is light/dark-mode aware, so they live here. The site's accent colour is still
+# set as $primary in styles.scss: the Bootswatch theme (Zephyr) assigns
 # `$primary` with a Sass `!default` that, under Quarto's layer ordering, wins
 # over anything a brand `color.primary` would set — so the brand file cannot
 # drive Bootstrap's primary with this theme. See the note at the top of
-# styles.scss.
+# styles.scss. The palette below is still the naming home for the colours; keep
+# `ultramarine` and the $primary / --qa-primary values in styles.scss in sync.
+
+color:
+  palette:
+    ultramarine: "#1E45C4"   # accent: links, navbar, selected states
+    gold: "#D97706"          # limited accent: progress, concept chips only
+    navy: "#1E293B"          # body + heading text
+    offwhite: "#FAFAF9"      # page background
+  foreground: navy
+  background: offwhite
+  primary: ultramarine
 
 typography:
+  fonts:
+    - family: Source Serif 4
+      source: google
+      weight: [400, 600, 700]
+      style: [normal, italic]
+    - family: Public Sans
+      source: google
+      weight: [400, 500, 600, 700]
+  base:
+    family: Public Sans
+    line-height: 1.6
   headings:
-    color:
-      light: "#111144"
-      dark: "#d0d0ff"
+    family: Source Serif 4
+    weight: 600
+    # Single (light) colour only. Providing a light/dark map here makes Quarto
+    # auto-generate a dark theme + toggle, but this site is a deliberate warm-
+    # light design and the quiz's colour tokens are light-only, so dark mode is
+    # intentionally off. Re-adding a `dark:` value would switch it back on.
+    color: "#1E293B"
+  link:
+    color: ultramarine
+    
+# Logo family, smallest to largest. `medium` is the primary logo — the compact
+# typelogo, matching the navbar (set explicitly in _quarto.yml). The wide lockup
+# is kept for large-display use; the social card is handled in _quarto.yml
+# (open-graph / twitter-card), not here.
+logo:
+  small: logo/oskc-mark-light.png
+  medium: logo/oskc-typelogo.png
+  large: logo/oskc-lockup.png

@@ -16,11 +16,24 @@ project:
     - "!README_forUpdating.qmd"
 
 website:
+  # Absolute base URL. Required so open-graph / twitter-card images resolve to
+  # full URLs — social scrapers can't load relative image paths. Must match the
+  # live GitHub Pages URL (the repo name is the path), so keep this in sync if
+  # the repo is ever renamed.
+  site-url: https://bellaratmelia.github.io/oskc
   title: "Open Scholarship Knowledge Check"
   description: "A self-assessment for librarians, research support professionals, and researchers interested in open scholarship."
   page-footer: "Made with love and [Quarto](https://quarto.org/) by [Bella Ratmelia](https://bellaratmelia.github.io/) + Claude Fable 5 & Opus 4.8 - [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)."
   reader-mode: false
+  favicon: logo/oskc-favicon-512.png
+  open-graph:
+    image: logo/oskc-social-card.png
+  twitter-card:
+    image: logo/oskc-social-card.png
   navbar:
+    logo: logo/oskc-typelogo.png
+    logo-alt: "Open Scholarship Knowledge Check"
+    title: false          # the lockup already contains the title
     background: light
     pinned: true
     left:
@@ -32,7 +45,7 @@ website:
         text: Development  
     tools:
       - icon: github
-        href: https://github.com/bellaratmelia/os-knowledge-check/  
+        href: https://github.com/bellaratmelia/oskc/  
 
 format:
   html:

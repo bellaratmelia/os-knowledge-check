@@ -2,13 +2,11 @@
 title: "Open Scholarship Knowledge Check"
 subtitle: "A self-assessment for librarians, research support professionals, and researchers interested in open scholarship."
 pagetitle: "Home"
-title-block-banner: true
-title-block-banner-color: "white"
 ---
 
 Open scholarship spans policies, infrastructure, publishing practices, identifiers, and assessment frameworks. Many professionals encounter these concepts regularly but rarely have an opportunity to assess their understanding in a structured way.
 
-This project provides a low-stakes way to explore what you already know and where you might want to learn more. The goal is to help you identify what you already know, uncover gaps in your understanding, and discover resources for further learning. Questions cover topics such as persistent identifiers, open access, research assessment, scholarly infrastructure, and related areas of scholarly communication.
+This project provides a low-stakes way to explore what you already know and where you might want to learn more. The goal is to help you identify what you already know, uncover gaps in your understanding, and discover resources for further learning. 
 
 ## How it works
 
@@ -393,27 +391,38 @@ quizApp = {
     const q = state.deck[state.idx];
     const total = state.deck.length;
 
-    // Progress indicator (text + a simple bar).
+    // Everything for one question lives in a single card, so it reads as one
+    // white surface against the warm page background.
+    const card = el("div", { className: "qa-question-card" });
+
+    // Progress indicator at the top of the card: "Question N of M" on the left,
+    // percent complete on the right, with a gold fill on a track below. Being
+    // *on* question 1 of 15 already counts as ~7% done, so the same value drives
+    // both the label and the fill and the bar is never quite empty.
+    const pct = Math.round(((state.idx + 1) / total) * 100);
     const progress = el("div", { className: "qa-progress" });
-    progress.append(el("span", {
+    const progressHead = el("div", { className: "qa-progress-head" });
+    progressHead.append(el("span", {
       className: "qa-progress-text",
       text: `Question ${state.idx + 1} of ${total}`
     }));
+    progressHead.append(el("span", { className: "qa-progress-pct", text: `${pct}%` }));
+    progress.append(progressHead);
     const bar = el("div", { className: "qa-progress-bar", attrs: { "aria-hidden": "true" } });
     const fill = el("div", { className: "qa-progress-fill" });
-    fill.style.width = `${(state.idx / total) * 100}%`;
+    fill.style.width = `${pct}%`;
     bar.append(fill);
     progress.append(bar);
-    root.append(progress);
+    card.append(progress);
 
     // Metadata line: level + area, so users always know the context.
     const meta = el("p", { className: "qa-qmeta" });
     meta.append(el("span", { className: "qa-tag", text: q.level }));
     meta.append(el("span", { className: "qa-tag", text: q.area }));
-    root.append(meta);
+    card.append(meta);
 
     // The question text.
-    root.append(el("h2", { className: "qa-question", text: q.question }));
+    card.append(el("h2", { className: "qa-question", text: q.question }));
 
     // A live region where feedback appears after the user answers. Both modes
     // write into it, so it is created before the mode-specific body.
@@ -421,7 +430,8 @@ quizApp = {
     root._feedback = feedback;
 
     if (state.mode === "short") {
-      renderShortAnswerBody(q, feedback);
+      renderShortAnswerBody(q, feedback, card);
+      root.append(card);
       return;
     }
 
@@ -438,8 +448,9 @@ quizApp = {
       optionButtons.push({ letter, btn });
       optionsGroup.append(btn);
     }
-    root.append(optionsGroup);
-    root.append(feedback);
+    card.append(optionsGroup);
+    card.append(feedback);
+    root.append(card);
     root._optionsGroup = optionsGroup;
   }
 
@@ -448,7 +459,7 @@ quizApp = {
   // themselves. There is no backend and no language model here, so honest
   // self-assessment is the only grading available — and it is a good fit for a
   // no-stakes tool whose point is to surface what you do not yet know.
-  function renderShortAnswerBody(q, feedback) {
+  function renderShortAnswerBody(q, feedback, container) {
     const form = el("div", { className: "qa-short" });
 
     const label = el("label", {
@@ -476,8 +487,8 @@ quizApp = {
     btnRow.append(revealBtn, skipBtn);
     form.append(btnRow);
 
-    root.append(form);
-    root.append(feedback);
+    container.append(form);
+    container.append(feedback);
     box.focus();
 
     // Ctrl/Cmd+Enter reveals, so a keyboard user never has to leave the textarea.

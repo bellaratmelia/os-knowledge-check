@@ -17,7 +17,11 @@
 // title banner. This is the ONE place to change the site's accent; keep the
 // --qa-primary token in the rules below in sync (the quiz widget's own colour,
 // with hand-tuned hover/tint variants that Bootstrap can't derive for us).
-$primary: #155e75;   // deep petrol teal
+
+$primary:  #1E45C4;   // ultramarine — navbar, links, active TOC, buttons
+$body-bg:  #FAFAF9;   // warm off-white page background
+$body-color: #1E293B; // charcoal navy body text
+$link-color: #1E45C4;
 
 
 /*-- scss:rules --*/
@@ -38,28 +42,44 @@ $primary: #155e75;   // deep petrol teal
    is Bootstrap's own, so text stays legible even if the web font fails to load.
    Code/pre/kbd are untouched - they use --bs-font-monospace, a separate variable.
    ========================================================================== */
+
 :root {
-  --bs-font-sans-serif: "Noto Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  --bs-body-font-family: var(--bs-font-sans-serif);
+  --qa-font-headings: "Source Serif 4", Georgia, "Times New Roman", serif;
+}
+
+h1, h2, h3, h4, h5, h6,
+.qa-question,
+.qa-fieldset > legend {
+  font-family: var(--qa-font-headings);
+  font-weight: 600;
+  letter-spacing: 0;
 }
 
 /* Colour tokens. Chosen for WCAG AA contrast against white backgrounds.
    Ratios below are against #ffffff; the accent is also checked against
    --qa-surface-alt, because link-styled buttons can sit on that tint. */
+
 :root {
-  --qa-primary: #155e75;          /* deep petrol, 7.27:1 on white, 6.83:1 on alt */
-  --qa-primary-dark: #0e4459;     /* hover/active */
-  --qa-primary-tint: #e8f2f6;     /* pale wash for hero + score ring track */
-  --qa-correct-bg: #e6f4ea;       /* pale green */
-  --qa-correct-border: #1a7f37;   /* green, ~5.2:1 on white */
-  --qa-correct-text: #14532d;
-  --qa-wrong-bg: #fdecea;         /* pale red */
-  --qa-wrong-border: #b42318;     /* red, ~5.9:1 on white */
-  --qa-wrong-text: #7a1710;
-  --qa-border: #d0d7de;
-  --qa-muted: #57606a;
-  --qa-surface: #ffffff;
-  --qa-surface-alt: #f6f8fa;
+  --qa-primary:        #1E45C4;
+  --qa-primary-dark:   #17359B;
+  --qa-primary-tint:   #E8EDFB;
+
+  --qa-accent:         #D97706;
+  --qa-accent-tint:    #FDF4E7;
+  --qa-accent-text:    #9A5606;
+
+  --qa-correct-bg:     #F1FAF4;
+  --qa-correct-border: #15803D;
+  --qa-correct-text:   #14532D;
+
+  --qa-wrong-bg:       #FDF3F3;
+  --qa-wrong-border:   #B91C1C;
+  --qa-wrong-text:     #7A1710;
+
+  --qa-border:         #E4E2DD;
+  --qa-muted:          #5A6473;
+  --qa-surface:        #FFFFFF;
+  --qa-surface-alt:    #F4F3F1;
 }
 
 /* ---- Title banner -------------------------------------------------------- */
@@ -645,6 +665,7 @@ summary:focus-visible,
   filter: brightness(0.96);
 }
 
+
 /* ---- Small screens ------------------------------------------------------ */
 @media (max-width: 520px) {
   .qa-question { font-size: 1.15rem; }
@@ -669,4 +690,103 @@ summary:focus-visible,
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* --- Title block, 4a: no slab. Title sits on the page under a short gold
+       rule; ultramarine goes back to being an accent. ---------------------- */
+
+.quarto-title-block .quarto-title .title {
+  font-family: var(--qa-font-headings);
+  font-size: clamp(2rem, 1.4rem + 2vw, 2.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: #1E293B;
+  margin-bottom: 0.6rem;
+}
+
+.quarto-title-block .quarto-title .title::after {
+  content: "";
+  display: block;
+  width: 88px;
+  height: 3px;
+  background: var(--qa-accent);
+  margin-top: 0.85rem;
+}
+
+.quarto-title-block .subtitle,
+.quarto-title-block .quarto-title .subtitle {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--qa-muted);
+  /* Match the body text measure (the content column) rather than capping at
+     60ch, so the subtitle wraps in line with the paragraphs beneath it. */
+  max-width: none;
+}
+
+/* Without the slab the navbar needs its own definition against the page. */
+.navbar {
+  background: var(--qa-surface);
+  border-bottom: 1px solid var(--qa-border);
+}
+.navbar .navbar-brand {
+  font-family: var(--qa-font-headings);
+  font-weight: 600;
+  color: #1E293B;
+}
+
+.navbar-brand img {
+  height: 40px;
+  width: auto;
+}
+
+/* --- Gold's whole job: progress and concept chips ---------------------- */
+
+/* Progress sits at the top of the question card: a header row with the
+   "Question N of M" label on the left and the percentage on the right, above a
+   warm track with a gold fill. (The .qa-progress container is NOT the track —
+   styling it as a 6px overflow-hidden bar previously clipped the label.) */
+.qa-progress {
+  margin: 0 0 1.1rem;
+}
+.qa-progress-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.4rem;
+}
+.qa-progress-text,
+.qa-progress-pct {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--qa-muted);
+}
+.qa-progress-bar {
+  margin-top: 0;
+  height: 6px;
+  background: var(--qa-border);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.qa-progress-fill {
+  height: 100%;
+  background: var(--qa-accent);
+  min-width: 6px;              /* 1 of 15 is invisible without this */
+  border-radius: 99px;
+  transition: width 0.25s ease;
+}
+
+.qa-chip {
+  color: var(--qa-accent-text);
+  background: var(--qa-accent-tint);
+}
+
+/* --- The question card needs an edge against the warm background -------
+   Wraps a single question (progress, chips, question text, options, feedback)
+   as one white surface. The wrapper is added in renderQuiz() in index.qmd. */
+
+.qa-question-card {
+  background: var(--qa-surface);
+  border: 1px solid var(--qa-border);
+  border-radius: 8px;
+  padding: 1.5rem 1.5rem 1.75rem;
 }
