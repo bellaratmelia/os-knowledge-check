@@ -375,6 +375,14 @@ quizApp = {
     updateStartability();
   }
 
+  // Short code for an area — the initials of its significant words ("Open Access"
+  // → "OA", "Persistent Identifiers & Metadata" → "PIM"). Used only to build the
+  // compact `areas` combo string sent to analytics, so even all nine areas fit
+  // well under GA's 100-char event-parameter limit that the full names exceed.
+  function areaCode(area) {
+    return area.split(/\s+/).filter(w => w !== "&").map(w => w[0].toUpperCase()).join("");
+  }
+
   // -- Begin a session from the current selection -----------------------------
   function startQuiz() {
     const pool = shuffle(matchingQuestions());
@@ -391,12 +399,25 @@ quizApp = {
     // on the deployed site, after the visitor accepts the cookie banner), so we
     // guard for it — this is a no-op in local preview and when consent is denied.
     if (typeof window.gtag === "function") {
+      // Compact, canonical (AREA_ORDER-sorted) code string of the chosen areas,
+      // e.g. "OA;RDM;RIE". Sorted so a combination maps to one value regardless
+      // of click order, and coded so even all nine areas stay well under GA's
+      // 100-char event-parameter limit that the full names would blow past. This
+      // captures which areas are chosen *together* (co-selection).
+      const areaCombo = AREA_ORDER.filter(a => state.areas.has(a)).map(areaCode).join(";");
       window.gtag("event", "start_quiz", {
         level: state.level,
         mode: state.mode,
         num_areas: state.areas.size,
-        num_questions: state.deck.length
+        num_questions: state.deck.length,
+        areas: areaCombo
       });
+      // Also fire one select_area event per chosen area. The areas string above
+      // captures co-selection; these give a clean per-area popularity count (via
+      // an `area` custom dimension), which a combined string can't easily provide.
+      for (const area of state.areas) {
+        window.gtag("event", "select_area", { area });
+      }
     }
 
     render();
