@@ -23,6 +23,14 @@ $body-bg:  #FAFAF9;   // warm off-white page background
 $body-color: #1E293B; // charcoal navy body text
 $link-color: #1E45C4;
 
+// Disable Zephyr's built-in web font import. The theme declares
+// `$web-font-path: "...Inter..." !default` and imports it from Google Fonts,
+// which would keep sending visitor IPs to Google even after switching the brand
+// fonts to Bunny (_brand.yml). We don't use Inter — body is Public Sans, headings
+// Source Serif 4 — so setting this false makes Zephyr's `@if $web-font-path`
+// guard skip the import, leaving Bunny as the only font host.
+$web-font-path: false;
+
 
 /*-- scss:rules --*/
 /* ==========================================================================
@@ -34,13 +42,12 @@ $link-color: #1E45C4;
    ========================================================================== */
 
 /* ---- Typography ----------------------------------------------------------
-   Override Bootstrap's font variables (rather than just setting body{}) so the
-   change reaches every component that references them - headings, navbar,
-   buttons, form controls - not just plain text. Noto Sans is a variable font
-   covering weights 100-900, so existing font-weight:600/700 rules elsewhere in
-   this file render correctly without extra utility classes. The fallback stack
-   is Bootstrap's own, so text stays legible even if the web font fails to load.
-   Code/pre/kbd are untouched - they use --bs-font-monospace, a separate variable.
+   The brand fonts - Public Sans for body, Source Serif 4 for headings - are set
+   in _brand.yml and loaded via Bunny Fonts. Here we only extend the heading font
+   to a few elements Quarto's brand mapping doesn't reach (the quiz question and
+   fieldset legends) and pin their weight. Source Serif 4 covers weights
+   400/600/700; the serif fallback stack keeps text legible if the web font fails
+   to load. Code/pre/kbd are untouched - they use --bs-font-monospace.
    ========================================================================== */
 
 :root {

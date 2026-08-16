@@ -20,13 +20,18 @@ color:
   primary: ultramarine
 
 typography:
+  # Fonts load from Bunny Fonts (source: bunny) rather than Google Fonts: Bunny is
+  # a privacy-first, GDPR-compliant drop-in mirror that logs no IPs and sets no
+  # cookies, so no visitor data reaches Google before the analytics consent gate.
+  # Same families/weights as Google Fonts — switching source back to google would
+  # reintroduce that exposure.
   fonts:
     - family: Source Serif 4
-      source: google
+      source: bunny
       weight: [400, 600, 700]
       style: [normal, italic]
     - family: Public Sans
-      source: google
+      source: bunny
       weight: [400, 500, 600, 700]
   base:
     family: Public Sans

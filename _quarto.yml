@@ -66,14 +66,10 @@ format:
       body-width: 900px 
     include-in-header:
       # Improve mobile rendering (Quarto sets a viewport by default, but we make it explicit).
-      # Also loads Noto Sans (chosen for legibility/accessibility) via <link> rather than
-      # a CSS @import, since preconnect + link lets the browser start fetching the font
-      # immediately instead of waiting for styles.css to load first.
+      # Fonts are not loaded here: Public Sans + Source Serif 4 come from the brand
+      # system (_brand.yml), served via Bunny Fonts.
       text: |
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     include-before-body:
       # "Skip to main content" link for keyboard and screen-reader users, so they can
       # bypass the repeated navbar on every page. Visually hidden until it receives
