@@ -82,7 +82,9 @@ The question bank is licensed under a  [CC BY-SA 4.0](https://creativecommons.or
 
 ## Privacy
 
-There is no login, analytics, or storage of your answers. Your selections and responses remain in your current browser session. Refreshing the page resets the quiz.
+There is no login and no account. Your quiz selections, answers, and score stay in your current browser session and are never sent anywhere or saved — refreshing the page resets the quiz.
+
+The site uses Google Analytics to understand overall usage, and only if you accept the cookie banner. If you decline, nothing is collected. When enabled, it records the usual Google Analytics stats e.g. how many people visit, roughly which country or region they come from, and what device or browser they use. Additionally, the analytics track how many people start and finish the quiz, along with the chosen difficulty level, answer format, number of topics, and the overall score for that session. This score is anonymous and aggregate — it helps me tell whether the questions are pitched at the right level — and cannot be linked back to you. The analytics do not record which individual answers you choose or any information that identifies you personally.
 
 ## Feedback and contributions
 

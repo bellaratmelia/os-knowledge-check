@@ -46,6 +46,9 @@ website:
     tools:
       - icon: github
         href: https://github.com/bellaratmelia/oskc/  
+  google-analytics: "G-LFMJ6DP6TP"
+  cookie-consent: express
+
 
 format:
   html:

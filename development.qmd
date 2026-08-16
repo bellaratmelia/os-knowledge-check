@@ -16,7 +16,7 @@ I developed this project with assistance from Claude Opus 4.8, using Quarto and 
 
 Questions are stored in a single CSV file in the project repository, `data/questions.csv`. The file is loaded in the visitor's browser when the quiz opens. The site is fully static and does not require a server, database, or user account.
 
-I may add basic visitor tracking in the future, purely to understand how many people use the quiz, such as by clicking the start button. If tracking is introduced, this page and the site's privacy information will be updated to explain what is collected and how it is used.
+The site uses Google Analytics for basic, aggregate usage tracking: how many people visit, roughly where they come from, and how they engage with the quiz. Two custom events are recorded — `start_quiz` when the start button is clicked (tagged with the chosen difficulty level, answer format, and number of topics) and `complete_quiz` when the results screen is reached (tagged with the level, format, and the session's score), so that a completion rate can be derived. Analytics run only if the visitor accepts the cookie banner, and no individual answers or personally identifying information are collected. See the [Privacy section on the About page](about.html#privacy) for the visitor-facing summary.
 
 ## Question development
 
@@ -62,6 +62,6 @@ Despite this review process, the question bank will still have questions that ne
 
 ## Maintenance and contributions
 
-If you find an error, ambiguous question, or outdated source, please https://github.com/bellaratmelia/os-knowledge-check/issues.
+If you find an error, ambiguous question, or outdated source, please let me know via [Issues](https://github.com/bellaratmelia/oskc/issues).
 
 You can also propose a change by editing `data/questions.csv` and submitting a pull request. Contributions that improve the accuracy, clarity, coverage, or accessibility of the question bank are very much welcome!

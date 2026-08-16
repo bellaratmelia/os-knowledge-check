@@ -15,7 +15,7 @@ This project provides a low-stakes way to explore what you already know and wher
 3. Answer the questions.
 4. Review explanations and suggested resources.
 
-Nothing is tracked or stored. This is a learning tool, not a certification.
+Your answers are never saved — they stay in your browser for this session only. The site uses basic analytics (only if you accept the cookie banner) to count visits and how many people start the quiz; see [Privacy](about.html#privacy) for details. This is a learning tool, not a certification.
 
 ## Take the quiz
 
@@ -236,7 +236,7 @@ quizApp = {
       `${questions.length} questions in the bank`,
       `${areasPresent.length} topic areas`,
       `${LEVELS.length} difficulty levels`,
-      "nothing is saved"
+      "your answers aren't saved"
     ]) {
       stats.append(el("span", { className: "qa-stat", text: bit }));
     }
@@ -382,6 +382,23 @@ quizApp = {
     state.idx = 0;
     state.responses = [];
     state.screen = "quiz";
+
+    // Analytics: record that a quiz was actually started, with the chosen
+    // settings. We reach gtag via `window.gtag` (a property access) rather than a
+    // bare `gtag`: Observable statically resolves free variable names against its
+    // runtime before running the cell, so a bare `gtag` throws "gtag is not
+    // defined" locally. gtag only exists once Google Analytics has loaded (i.e.
+    // on the deployed site, after the visitor accepts the cookie banner), so we
+    // guard for it — this is a no-op in local preview and when consent is denied.
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "start_quiz", {
+        level: state.level,
+        mode: state.mode,
+        num_areas: state.areas.size,
+        num_questions: state.deck.length
+      });
+    }
+
     render();
   }
 
@@ -664,6 +681,22 @@ quizApp = {
     const total = state.responses.length;
     const correct = state.responses.filter(r => r.isCorrect).length;
     const pct = total ? Math.round((correct / total) * 100) : 0;
+
+    // Analytics: record that a quiz was completed (reached the results screen),
+    // paired with start_quiz so a completion rate can be derived. Tagged with the
+    // score so we can also gauge whether difficulty is well calibrated. Same
+    // window.gtag guard as start_quiz — a no-op locally and when consent is
+    // denied. Fires once per completion; replaying the quiz fires it again, which
+    // is correct (each finished run is a real completion).
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "complete_quiz", {
+        level: state.level,
+        mode: state.mode,
+        score: correct,
+        num_questions: total,
+        percent: pct
+      });
+    }
 
     root.append(el("h2", { text: "Your results" }));
 
